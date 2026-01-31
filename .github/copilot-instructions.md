@@ -468,5 +468,194 @@ export const transformProductForDisplay = ({ $product = null }) => {
 
 ---
 
-**Last Updated:** 28 ธันวาคม 2568  
+**Last Updated:** 28 ธันวาคม 2568
 **Version:** 1.0.0
+
+---
+
+## 7. Next.js SEO Best Practices (App Router)
+
+### 7.1 Metadata Configuration
+
+เราใช้ Next.js 14+ App Router สำหรับ SEO ทุกหน้าต้องมี metadata ที่เหมาะสม
+
+```javascript
+// ✅ ถูกต้อง - Static Metadata
+export const metadata = {
+  title: "Page Title | QR Bistro",
+  description: "คำอธิบายหน้านี้ที่มีความยาว 150-160 ตัวอักษร",
+  keywords: ["keyword1", "keyword2", "keyword3"],
+  openGraph: {
+    title: "Page Title",
+    description: "คำอธิบายสำหรับ Social Media",
+    images: ["/og-image.png"],
+  },
+};
+
+// ✅ ถูกต้อง - Dynamic Metadata
+export async function generateMetadata({ params, searchParams }) {
+  const data = await fetchData(params.id);
+
+  return {
+    title: `${data.name} | QR Bistro`,
+    description: data.description,
+    openGraph: {
+      title: data.name,
+      description: data.description,
+      images: [data.image],
+    },
+  };
+}
+```
+
+### 7.2 Structured Data (JSON-LD)
+
+ใช้ JSON-LD สำหรับ Rich Snippets
+
+```javascript
+// ✅ ถูกต้อง - Restaurant Schema
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@type": "Restaurant",
+  name: "Restaurant Name",
+  image: "https://example.com/image.jpg",
+  address: {
+    "@type": "PostalAddress",
+    streetAddress: "123 Main St",
+    addressLocality: "Bangkok",
+    addressCountry: "TH",
+  },
+  servesCuisine: "Thai",
+  priceRange: "$$",
+};
+
+export default function Page() {
+  return (
+    <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
+      {/* Page content */}
+    </>
+  );
+}
+```
+
+### 7.3 Image Optimization
+
+ใช้ next/image สำหรับ optimized images
+
+```javascript
+import Image from "next/image";
+
+// ✅ ถูกต้อง - มี alt text ที่อธิบายรูปภาพ
+<Image
+  src="/hero.jpg"
+  alt="QR Bistro - ระบบสั่งอาหารผ่าน QR Code"
+  width={1200}
+  height={630}
+  priority // สำหรับ LCP images
+/>
+
+// ❌ ผิด - ไม่มี alt text หรือ alt text ไม่อธิบาย
+<Image src="/hero.jpg" alt="image" width={1200} height={630} />
+```
+
+### 7.4 Semantic HTML
+
+ใช้ semantic HTML elements อย่างถูกต้อง
+
+```javascript
+// ✅ ถูกต้อง
+<main>
+  <article>
+    <header>
+      <h1>Main Title</h1>
+    </header>
+    <section>
+      <h2>Section Title</h2>
+      <p>Content...</p>
+    </section>
+  </article>
+  <aside>
+    <nav aria-label="Related links">
+      <ul>
+        <li><a href="/link1">Link 1</a></li>
+      </ul>
+    </nav>
+  </aside>
+</main>
+
+// ❌ ผิด - ใช้ div แทน semantic elements
+<div>
+  <div>
+    <div>Main Title</div>
+  </div>
+</div>
+```
+
+### 7.5 Dynamic Routes SEO
+
+```javascript
+// src/app/menu/[slug]/page.js
+
+// Generate static params for SSG
+export async function generateStaticParams() {
+  const items = await getMenuItems();
+  return items.map((item) => ({
+    slug: item.slug,
+  }));
+}
+
+// Generate metadata for each page
+export async function generateMetadata({ params }) {
+  const item = await getMenuItem(params.slug);
+
+  return {
+    title: item.name,
+    description: item.description,
+    alternates: {
+      canonical: `/menu/${params.slug}`,
+    },
+  };
+}
+```
+
+### 7.6 Performance Optimization
+
+```javascript
+// ✅ ถูกต้อง - ใช้ loading states
+import { Suspense } from "react";
+
+export default function Page() {
+  return (
+    <Suspense fallback={<Loading />}>
+      <AsyncComponent />
+    </Suspense>
+  );
+}
+
+// ✅ ถูกต้อง - ใช้ dynamic imports
+import dynamic from "next/dynamic";
+
+const HeavyComponent = dynamic(() => import("./HeavyComponent"), {
+  loading: () => <Loading />,
+  ssr: false, // ถ้าไม่ต้องการ SSR
+});
+```
+
+---
+
+## 📝 SEO Checklist
+
+- [ ] ทุกหน้ามี unique title และ description
+- [ ] ใช้ heading hierarchy อย่างถูกต้อง (h1 > h2 > h3)
+- [ ] รูปภาพทุกรูปมี alt text ที่อธิบายเนื้อหา
+- [ ] ใช้ semantic HTML elements
+- [ ] มี Open Graph และ Twitter Card metadata
+- [ ] มี canonical URL สำหรับหน้าที่อาจ duplicate
+- [ ] ใช้ JSON-LD structured data เมื่อเหมาะสม
+- [ ] Optimize images ด้วย next/image
+- [ ] ใช้ priority สำหรับ LCP images
+- [ ] ตรวจสอบ Core Web Vitals
