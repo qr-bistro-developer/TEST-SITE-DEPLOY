@@ -1,0 +1,6 @@
+{
+  "cSpell.words": [],
+  "prettier.arrowParens": "always",
+  "editor.formatOnSave": true,
+  "editor.defaultFormatter": "esbenp.prettier-vscode"
+}
