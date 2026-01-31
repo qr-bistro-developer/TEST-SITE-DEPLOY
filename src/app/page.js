@@ -1,3 +1,4 @@
+import { FONT_FAMILIES } from "@/statics/fonts";
 import styled from "styled-components";
 
 const Container = styled.div`
@@ -8,8 +9,8 @@ const Container = styled.div`
 const Index = () => {
   return (
     <Container>
-      <div>1</div>
-      <div>2</div>
+      <div style={{ fontFamily: FONT_FAMILIES.BUENARD }}>BUENARD</div>
+      <div style={{ fontFamily: FONT_FAMILIES.ANUPHAN }}>BUENARD</div>
     </Container>
   );
 };
