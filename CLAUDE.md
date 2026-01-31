@@ -120,11 +120,17 @@ export async function generateMetadata({ params }) {
 
 ### Store Configuration
 - Uses Redux Toolkit with Redux Persist
-- Persists to localStorage (with SSR-safe storage)
+- Persists to **Cookie Storage** with AES encryption (SSR-safe)
+- Cookie prefix: `qrb_`
 
 ```javascript
 import { store, persistor } from "@/redux/store";
 ```
+
+### Cookie Storage
+Data is stored in cookies with AES encryption using `crypto-js`:
+- `src/lib/cookieStorage.js` - Custom cookie storage for redux-persist
+- Set `NEXT_PUBLIC_PERSIST_SECRET` env variable for custom encryption key
 
 ### Creating Reducers
 ```javascript
@@ -174,15 +180,43 @@ yarn start    # Start production server
 yarn lint     # Run ESLint
 ```
 
+## Font Loading
+
+Fonts are preloaded with `FontProvider` context for better UX:
+- Uses `document.fonts.ready` API
+- Content fades in after fonts are loaded
+- Located at `src/contexts/FontContext.js`
+
+```javascript
+import { useFonts } from "@/contexts/FontContext";
+
+const { fontsLoaded } = useFonts();
+```
+
+## Git Empty Folders (.gitkeep)
+
+เพื่อให้ folder ว่างสามารถ push ขึ้น git ได้:
+- สร้างไฟล์ `.gitkeep` ใน folder ที่ว่างเปล่า
+- **สำคัญ:** เมื่อ folder มีไฟล์แล้ว ให้ลบ `.gitkeep` ออก
+
+```bash
+# สร้าง .gitkeep
+touch src/new-folder/.gitkeep
+
+# ลบ .gitkeep เมื่อมีไฟล์แล้ว
+rm src/new-folder/.gitkeep
+```
+
 ## Important Notes
 
 1. **SSR Compatibility:** All client-side code must be in "use client" components
-2. **State Hydration:** Redux Persist handles state rehydration automatically
-3. **Font Loading:** Fonts are preloaded and use `display: swap`
+2. **State Hydration:** Redux Persist handles state rehydration with cookie storage
+3. **Font Loading:** Fonts are preloaded with FontLoader, use `display: swap`
 4. **SEO:** Always add metadata to new pages
 5. **Accessibility:** Use semantic HTML and ARIA attributes
+6. **.gitkeep:** ลบ .gitkeep เมื่อ folder มีไฟล์แล้ว
 
 ---
 
-**Version:** 1.0.0
+**Version:** 1.1.0
 **Last Updated:** January 2025

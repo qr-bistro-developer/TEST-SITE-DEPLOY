@@ -9,28 +9,8 @@ import {
   PURGE,
   REGISTER,
 } from "redux-persist";
-import createWebStorage from "redux-persist/lib/storage/createWebStorage";
-import logger from "redux-logger";
+import cookieStorage from "@/lib/cookieStorage";
 import guide from "@redux/reducers/guide.reducers";
-
-const createNoopStorage = () => {
-  return {
-    getItem() {
-      return Promise.resolve(null);
-    },
-    setItem(_key, value) {
-      return Promise.resolve(value);
-    },
-    removeItem() {
-      return Promise.resolve();
-    },
-  };
-};
-
-const storage =
-  typeof window !== "undefined"
-    ? createWebStorage("local")
-    : createNoopStorage();
 
 const rootReducer = combineReducers({
   guide,
@@ -39,7 +19,7 @@ const rootReducer = combineReducers({
 const persistConfig = {
   key: "root",
   version: 1,
-  storage,
+  storage: cookieStorage,
   whitelist: ["guide"],
 };
 

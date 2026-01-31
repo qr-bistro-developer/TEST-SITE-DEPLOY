@@ -65,6 +65,7 @@ export const niramit = localFont({
   ],
   variable: "--font-niramit",
   display: "swap",
+  preload: true,
 });
 
 export const anuphan = localFont({
@@ -107,6 +108,7 @@ export const anuphan = localFont({
   ],
   variable: "--font-anuphan",
   display: "swap",
+  preload: true,
 });
 
 export const kanit = localFont({
@@ -149,4 +151,5 @@ export const kanit = localFont({
   ],
   variable: "--font-kanit",
   display: "swap",
+  preload: true,
 });

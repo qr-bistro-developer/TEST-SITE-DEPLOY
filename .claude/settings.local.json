@@ -2,7 +2,8 @@
   "permissions": {
     "allow": [
       "Bash(yarn add redux-logger redux-thunk react-redux redux redux-persist socket.io-client styled-components uuid dayjs dayjs-plugin-utc lodash @reduxjs/toolkit react-hook-form react-modal)",
-      "Bash(yarn build:*)"
+      "Bash(yarn build:*)",
+      "Bash(yarn add:*)"
     ]
   }
 }
