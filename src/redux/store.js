@@ -9,7 +9,7 @@ import {
   PURGE,
   REGISTER,
 } from "redux-persist";
-import cookieStorage from "@/lib/cookieStorage";
+import { cookieStorage } from "@lib/cookieStorage";
 import guide from "@redux/reducers/guide.reducers";
 
 const rootReducer = combineReducers({
