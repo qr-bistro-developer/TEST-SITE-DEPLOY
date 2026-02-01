@@ -1,8 +1,9 @@
-import { headers } from "next/headers";
-import _ from "lodash";
-import { httpRequest } from "@/helpers/https/httpRequest";
+"use client";
 import styled from "styled-components";
 import { ContainerLayout } from "@/components/Core/ContainerLayout";
+import { useDispatch } from "react-redux";
+import { set } from "lodash";
+import { setAccessToken } from "@/store/reducers/accessToken.reducers";
 
 const Container = styled.div`
   display: flex;
@@ -13,32 +14,18 @@ const Container = styled.div`
   background: blue;
 `;
 
-const MenuRestaurant = async ({ params = {} }) => {
-  // const headersList = await headers();
-  // const { restaurantOrderId = "" } = await params;
-  // const subdomain = headersList.get("x-subdomain") || "";
+const MenuRestaurant = ({ params = {} }) => {
+  const dispatch = useDispatch();
 
-  const data = await httpRequest({
-    externalUrl: `https://jsonplaceholder.typicode.com/todos/1`,
-    method: "get",
-  });
-  console.log("data :>> ", data);
+  const handleSaveToken = () => {
+    dispatch(setAccessToken("sample_token_12345"));
+    localStorage.setItem("accessToken", "sample_token_12345");
+  };
 
   return (
     <ContainerLayout>
       <Container>
-        <div style={{ background: "green", height: 300, width: 20 }} />
-        <div style={{ background: "green", height: 300, width: 20 }} />
-        <div style={{ background: "green", height: 300, width: 20 }} />
-        <div style={{ background: "green", height: 300, width: 20 }} />
-        <div style={{ background: "green", height: 300, width: 20 }} />
-        <div style={{ background: "green", height: 300, width: 20 }} />
-        <div style={{ background: "green", height: 300, width: 20 }} />
-        <div style={{ background: "green", height: 300, width: 20 }} />
-        <div style={{ background: "green", height: 300, width: 20 }} />
-        <div style={{ background: "green", height: 300, width: 20 }} />
-        <div style={{ background: "green", height: 300, width: 20 }} />
-        <div style={{ background: "black", height: 300, width: 20 }} />
+        <button onClick={handleSaveToken}>Save Access Token</button>
       </Container>
     </ContainerLayout>
   );
