@@ -3,8 +3,9 @@
 import Cookies from "js-cookie";
 import CryptoJS from "crypto-js";
 
-const SECRET_KEY = process.env.NEXT_PUBLIC_PERSIST_SECRET || "qr-bistro-secret-key";
-const COOKIE_PREFIX = "qrb_";
+const SECRET_KEY =
+  process.env.NEXT_PUBLIC_PERSIST_SECRET || "qr-bistro-secret-key";
+const COOKIE_PREFIX = "QR_BISTRO_";
 
 const encrypt = ({ $data }) => {
   try {
