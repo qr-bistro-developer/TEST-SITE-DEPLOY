@@ -468,8 +468,8 @@ export const transformProductForDisplay = ({ $product = null }) => {
 
 ---
 
-**Last Updated:** 28 ธันวาคม 2568
-**Version:** 1.0.0
+**Last Updated:** 1 กุมภาพันธ์ 2569
+**Version:** 1.1.0
 
 ---
 
@@ -704,3 +704,128 @@ src/components/
 - [ ] สร้าง .gitkeep ใน folder ว่างที่ต้องการ track
 - [ ] ลบ .gitkeep ทันทีเมื่อ folder มีไฟล์อื่นแล้ว
 - [ ] ไม่ commit folder ที่มีทั้ง .gitkeep และไฟล์อื่น
+
+---
+
+## 9. No index.js Re-exports
+
+### ✅ DO: Import ตรงจากไฟล์
+
+เพื่อให้หาไฟล์ได้ง่าย ไม่สร้าง index.js สำหรับ re-export
+
+```javascript
+// ✅ ถูกต้อง - import ตรงจากไฟล์
+import { getSubdomain } from "@utils/routes/subdomain";
+import { handleSubdomainRestriction } from "@utils/routes/restrictions";
+import { getCookieStorage } from "@lib/cookieStorage";
+```
+
+### ❌ DON'T: ไม่ใช้ index.js re-export
+
+```javascript
+// ❌ ผิด - import ผ่าน index.js
+import { getSubdomain } from "@utils/routes";
+import { getCookieStorage } from "@lib";
+```
+
+---
+
+## 10. Route Restrictions (Middleware)
+
+### Configuration
+
+กำหนด route restrictions ที่ `src/statics/restrictedRoutes.js`:
+
+```javascript
+import { RESTRICTION_TYPES } from "@statics/restrictedRoutes";
+
+// Types available:
+// - SUBDOMAIN: ต้องมี subdomain
+// - AUTH: ต้อง login
+// - SUBDOMAIN_AND_AUTH: ต้องมีทั้งคู่
+
+export const RESTRICTED_ROUTES = [
+  {
+    path: "/menu",
+    restriction: RESTRICTION_TYPES.SUBDOMAIN,
+    redirectTo: "/",
+  },
+];
+```
+
+### การดึง Subdomain ในหน้า
+
+```javascript
+import { headers } from "next/headers";
+
+const MyPage = async () => {
+  const headersList = await headers();
+  const subdomain = headersList.get("x-subdomain") || "";
+
+  return <div>Restaurant: {subdomain}</div>;
+};
+```
+
+---
+
+## 11. Font Loading
+
+### Main Font (Preloaded)
+
+- เฉพาะ `ibmPlexSansThai` ที่ preload
+- อยู่ที่ `src/assets/fonts/index.js`
+
+```javascript
+import { ibmPlexSansThai } from "@assets/fonts";
+```
+
+### Optional Font Loading Hook
+
+สำหรับหน้าที่ต้องการรอ fonts โหลดก่อน render:
+
+```javascript
+import { useFontLoader } from "@/hooks/useFontLoader";
+import { FONT_FAMILIES } from "@statics/fonts";
+
+const EditorPage = () => {
+  // โหลด font เฉพาะ
+  const { fontsLoaded, isLoading } = useFontLoader({
+    $fonts: [FONT_FAMILIES.KANIT],
+  });
+
+  // โหลดทุก fonts
+  const { fontsLoaded } = useFontLoader({ $loadAll: true });
+
+  if (isLoading) return <Loading />;
+  return <Content />;
+};
+```
+
+---
+
+## 12. Cookie Storage
+
+### Named Exports
+
+```javascript
+import {
+  getCookieStorage,
+  setCookieStorage,
+  removeCookieStorage,
+} from "@lib/cookieStorage";
+
+// ใช้งาน
+await getCookieStorage({ $key: "myKey" });
+await setCookieStorage({ $key: "myKey", $value: JSON.stringify(data) });
+await removeCookieStorage({ $key: "myKey" });
+```
+
+### For Redux Persist
+
+```javascript
+import { cookieStorage } from "@lib/cookieStorage";
+
+const persistConfig = {
+  storage: cookieStorage,
+};
+```

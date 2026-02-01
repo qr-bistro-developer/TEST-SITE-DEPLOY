@@ -19,14 +19,17 @@ QR Bistro เป็นระบบจัดการร้านอาหาร�
 ```
 src/
 ├── app/           # Next.js App Router pages
-├── components/    # Reusable React components
-├── lib/           # Library configurations (fonts, providers, registry)
-├── redux/         # Redux store and reducers
-├── styles/        # Global CSS styles
-├── utils/         # Utility functions
-├── contexts/      # React contexts
 ├── assets/        # Static assets (fonts, images, svgs)
-└── statics/       # Static data/constants
+│   └── fonts/     # Font definitions (next/font)
+├── components/    # Reusable React components
+├── contexts/      # React contexts & providers
+├── hooks/         # Custom React hooks
+├── lib/           # Library configurations (registry, cookieStorage)
+├── redux/         # Redux store and reducers
+├── statics/       # Static data/constants
+├── styles/        # Global CSS styles
+└── utils/         # Utility functions
+    └── routes/    # Route utilities (subdomain, restrictions)
 ```
 
 ## Path Aliases
@@ -71,6 +74,48 @@ const name = _.get($item, ['user', 'name'], 'Unknown');
 const Container = styled.div`
   background: ${({ $bg = '#fff' }) => $bg};
 `;
+```
+
+### 4. No index.js Re-exports
+- ไม่สร้าง index.js สำหรับ re-export
+- Import ตรงจากไฟล์เลย เพื่อหาไฟล์ได้ง่าย
+
+```javascript
+// ✅ ถูกต้อง
+import { getSubdomain } from "@utils/routes/subdomain";
+
+// ❌ ผิด
+import { getSubdomain } from "@utils/routes";
+```
+
+## Middleware & Route Restrictions
+
+### Route Configuration
+กำหนด route restrictions ที่ `src/statics/restrictedRoutes.js`:
+
+```javascript
+import { RESTRICTION_TYPES, RESTRICTED_ROUTES } from "@statics/restrictedRoutes";
+
+// Types:
+// - SUBDOMAIN: ต้องมี subdomain
+// - AUTH: ต้อง login
+// - SUBDOMAIN_AND_AUTH: ต้องมีทั้งคู่
+```
+
+### Middleware
+- `src/middleware.js` - ตรวจสอบ route restrictions
+- `src/utils/routes/subdomain.js` - ดึง subdomain จาก hostname
+- `src/utils/routes/restrictions.js` - handlers สำหรับแต่ละ restriction type
+
+### การดึง Subdomain ในหน้า
+```javascript
+import { headers } from "next/headers";
+
+const MyPage = async () => {
+  const headersList = await headers();
+  const subdomain = headersList.get("x-subdomain") || "";
+  // ...
+};
 ```
 
 ## SEO Guidelines (Next.js App Router)
@@ -121,16 +166,24 @@ export async function generateMetadata({ params }) {
 ### Store Configuration
 - Uses Redux Toolkit with Redux Persist
 - Persists to **Cookie Storage** with AES encryption (SSR-safe)
-- Cookie prefix: `qrb_`
+- Cookie prefix: `QR_BISTRO_`
 
 ```javascript
-import { store, persistor } from "@/redux/store";
+import { store, persistor } from "@redux/store";
 ```
 
 ### Cookie Storage
 Data is stored in cookies with AES encryption using `crypto-js`:
 - `src/lib/cookieStorage.js` - Custom cookie storage for redux-persist
 - Set `NEXT_PUBLIC_PERSIST_SECRET` env variable for custom encryption key
+
+```javascript
+// Named exports
+import { getCookieStorage, setCookieStorage, removeCookieStorage } from "@lib/cookieStorage";
+
+// For redux-persist
+import { cookieStorage } from "@lib/cookieStorage";
+```
 
 ### Creating Reducers
 ```javascript
@@ -159,16 +212,59 @@ The project uses a custom registry (`src/lib/registry.js`) for styled-components
 
 ## Local Fonts
 
-Available font variables:
-- `--font-niramit` - Niramit (Thai)
-- `--font-anuphan` - Anuphan (Thai)
-- `--font-kanit` - Kanit (Thai)
+### Font Configuration
+- Fonts defined at `src/assets/fonts/index.js`
+- Uses `next/font/local`
+- Only `ibmPlexSansThai` is preloaded (main font)
+- Other fonts have `preload: false`
+
+### Available Fonts
+```javascript
+import { ibmPlexSansThai, kanit, niramit } from "@assets/fonts";
+```
+
+Font variables:
+- `--font-ibmPlexSansThai` - IBM Plex Sans Thai (preloaded)
+- `--font-kanit` - Kanit
+- `--font-niramit` - Niramit
+- และอื่นๆ...
+
+### Font Constants
+```javascript
+import { FONT_FAMILIES } from "@statics/fonts";
+// FONT_FAMILIES.IBM_PLEX_SANS_THAI = "var(--font-ibmPlexSansThai)"
+```
+
+## Font Loading (Optional)
+
+สำหรับหน้าที่ต้องการรอ fonts โหลดก่อน render ใช้ `useFontLoader` hook:
+
+```javascript
+import { useFontLoader } from "@/hooks/useFontLoader";
+import { FONT_FAMILIES } from "@statics/fonts";
+
+const MyPage = () => {
+  // โหลด font เฉพาะ
+  const { fontsLoaded, isLoading } = useFontLoader({
+    $fonts: [FONT_FAMILIES.IBM_PLEX_SANS_THAI],
+  });
+
+  // โหลดทุก fonts (สำหรับ editor)
+  const { fontsLoaded } = useFontLoader({ $loadAll: true });
+
+  if (isLoading) return <Loading />;
+  return <Content />;
+};
+```
+
+**หมายเหตุ:** ไม่จำเป็นต้องใช้ทุกหน้า - `next/font` จัดการ font loading ให้อยู่แล้ว
 
 ## Environment Variables
 
 ```env
 NEXT_PUBLIC_SITE_URL=https://your-domain.com
 NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION=your-verification-code
+NEXT_PUBLIC_PERSIST_SECRET=your-encryption-key
 ```
 
 ## Commands
@@ -178,19 +274,6 @@ yarn dev      # Start development server
 yarn build    # Build for production
 yarn start    # Start production server
 yarn lint     # Run ESLint
-```
-
-## Font Loading
-
-Fonts are preloaded with `FontProvider` context for better UX:
-- Uses `document.fonts.ready` API
-- Content fades in after fonts are loaded
-- Located at `src/contexts/FontContext.js`
-
-```javascript
-import { useFonts } from "@/contexts/FontContext";
-
-const { fontsLoaded } = useFonts();
 ```
 
 ## Git Empty Folders (.gitkeep)
@@ -211,12 +294,13 @@ rm src/new-folder/.gitkeep
 
 1. **SSR Compatibility:** All client-side code must be in "use client" components
 2. **State Hydration:** Redux Persist handles state rehydration with cookie storage
-3. **Font Loading:** Fonts are preloaded with FontLoader, use `display: swap`
+3. **Font Loading:** Main font (IBM Plex Sans Thai) is preloaded, others are lazy loaded
 4. **SEO:** Always add metadata to new pages
 5. **Accessibility:** Use semantic HTML and ARIA attributes
 6. **.gitkeep:** ลบ .gitkeep เมื่อ folder มีไฟล์แล้ว
+7. **No index.js:** ไม่สร้าง index.js สำหรับ re-export
 
 ---
 
-**Version:** 1.1.0
-**Last Updated:** January 2025
+**Version:** 1.2.0
+**Last Updated:** February 2025
