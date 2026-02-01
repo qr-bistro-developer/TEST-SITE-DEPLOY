@@ -10,8 +10,8 @@ import {
   REGISTER,
 } from "redux-persist";
 import { cookieStorage } from "@store/cookies/client";
-import guide from "@redux/reducers/guide.reducers";
-import accessToken from "@redux/reducers/accessToken.reducers";
+import guide from "@store/reducers/guide.reducers";
+import accessToken from "@store/reducers/accessToken.reducers";
 
 const rootReducer = combineReducers({
   guide,

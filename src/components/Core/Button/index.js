@@ -31,7 +31,7 @@
  */
 
 import styled, { css } from "styled-components";
-import { resolveSize } from "@/utils/resolve";
+import { resolveSize } from "@utils/resolve/resolveSize";
 
 export const Button = styled.button`
   display: flex;
@@ -40,8 +40,8 @@ export const Button = styled.button`
   flex-direction: ${({ $flexDirection = "row" }) => $flexDirection};
   gap: ${({ $gap = 0 }) => `${$gap}px`};
 
-  width: ${({ $width = "auto" }) => resolveSize({ $value: $width })};
-  height: ${({ $height = "auto" }) => resolveSize({ $value: $height })};
+  width: ${({ $width = "auto" }) => resolveSize({ value: $width })};
+  height: ${({ $height = "auto" }) => resolveSize({ value: $height })};
 
   ${({ $isSquare = false }) =>
     $isSquare &&

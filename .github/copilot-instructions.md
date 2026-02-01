@@ -21,15 +21,33 @@
 
 เราจะสร้างฟังก์ชันโดยใช้ destructuring parameters เสมอ
 
+#### React Components - ใช้ `$` prefix
 ```javascript
-// ✅ ถูกต้อง
+// ✅ ถูกต้อง - Component ใช้ $ prefix
 export const MyComponent = ({ $prop1, $prop2, $onPress }) => {
   // implementation
 };
 
 // ✅ ถูกต้อง - มี default values
-export const MyFunction = ({ $value = null, $isActive = false, $callback = () => undefined }) => {
+export const MyComponent = ({ $value = null, $isActive = false, $callback = () => undefined }) => {
   // implementation
+};
+```
+
+#### Functions/Helpers - ไม่ใช้ `$` prefix
+```javascript
+// ✅ ถูกต้อง - Function ไม่ใช้ $ prefix
+export const httpRequest = async ({
+  method = "post",
+  path = null,
+  data = null,
+} = {}) => {
+  // implementation
+};
+
+// ✅ ถูกต้อง - Helper function
+export const formatCurrency = ({ value = 0, currency = "THB" } = {}) => {
+  return `${value} ${currency}`;
 };
 ```
 
@@ -52,19 +70,19 @@ export const MyComponent = (props) => {
 เราจะไม่ใช้ implicit return หรือ short return แม้ว่าโค้ดจะสั้น
 
 ```javascript
-// ✅ ถูกต้อง - มี return statement
-const calculateTotal = ({ $price, $quantity }) => {
-  return $price * $quantity;
+// ✅ ถูกต้อง - มี return statement (function ไม่ใช้ $ prefix)
+const calculateTotal = ({ price, quantity }) => {
+  return price * quantity;
 };
 
 // ✅ ถูกต้อง - มี return statement แม้จะเป็นบรรทัดเดียว
-const isValid = ({ $value }) => {
-  return $value !== null && $value !== undefined;
+const isValid = ({ value }) => {
+  return value !== null && value !== undefined;
 };
 
 // ✅ ถูกต้อง - arrow function ที่มี return
-const filterItems = ({ $items, $filter }) => {
-  return $items.filter((item) => item.active === $filter);
+const filterItems = ({ items, filter }) => {
+  return items.filter((item) => item.active === filter);
 };
 ```
 
@@ -72,10 +90,10 @@ const filterItems = ({ $items, $filter }) => {
 
 ```javascript
 // ❌ ผิด - implicit return
-const calculateTotal = ({ $price, $quantity }) => $price * $quantity;
+const calculateTotal = ({ price, quantity }) => price * quantity;
 
 // ❌ ผิด - short return ใน arrow function
-const isValid = ({ $value }) => $value !== null;
+const isValid = ({ value }) => value !== null;
 ```
 
 ---
@@ -89,15 +107,15 @@ const isValid = ({ $value }) => $value !== null;
 ```javascript
 import _ from 'lodash';
 
-// ✅ ถูกต้อง - ใช้ array notation
-const name = _.get($item, ['name']);
-const nestedValue = _.get($item, ['user', 'profile', 'email']);
-const withDefault = _.get($item, ['price'], 0);
+// ✅ ถูกต้อง - ใช้ array notation (ใน function ไม่ใช้ $ prefix)
+const name = _.get(item, ['name']);
+const nestedValue = _.get(item, ['user', 'profile', 'email']);
+const withDefault = _.get(item, ['price'], 0);
 
 // ✅ ถูกต้อง - ใช้กับ conditional
-const displayName = _.get($user, ['displayName']) || _.get($user, ['username']) || 'Anonymous';
+const displayName = _.get(user, ['displayName']) || _.get(user, ['username']) || 'Anonymous';
 
-// ✅ ถูกต้อง - ใช้ใน JSX
+// ✅ ถูกต้อง - ใช้ใน JSX (ใน Component ใช้ $ prefix)
 <Text>{_.get($item, ['name'], '-')}</Text>
 <Text>{_.get($item, ['price']) > 0 ? resolveCurrency({ value: _.get($item, ['price']) }) : '-'}</Text>
 ```
@@ -790,11 +808,11 @@ import { FONT_FAMILIES } from "@statics/fonts";
 const EditorPage = () => {
   // โหลด font เฉพาะ
   const { fontsLoaded, isLoading } = useFontLoader({
-    $fonts: [FONT_FAMILIES.KANIT],
+    fonts: [FONT_FAMILIES.KANIT],
   });
 
   // โหลดทุก fonts
-  const { fontsLoaded } = useFontLoader({ $loadAll: true });
+  const { fontsLoaded } = useFontLoader({ loadAll: true });
 
   if (isLoading) return <Loading />;
   return <Content />;
@@ -812,18 +830,18 @@ import {
   getCookieStorage,
   setCookieStorage,
   removeCookieStorage,
-} from "@lib/cookieStorage";
+} from "@store/cookies/client";
 
 // ใช้งาน
-await getCookieStorage({ $key: "myKey" });
-await setCookieStorage({ $key: "myKey", $value: JSON.stringify(data) });
-await removeCookieStorage({ $key: "myKey" });
+getCookieStorage("myKey");
+setCookieStorage("myKey", data);
+removeCookieStorage("myKey");
 ```
 
 ### For Redux Persist
 
 ```javascript
-import { cookieStorage } from "@lib/cookieStorage";
+import { cookieStorage } from "@store/cookies/client";
 
 const persistConfig = {
   storage: cookieStorage,

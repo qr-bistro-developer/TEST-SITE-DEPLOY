@@ -12,9 +12,9 @@ import {
 export function middleware(request) {
   const { pathname } = request.nextUrl;
   const hostname = request.headers.get("host") || "";
-  const subdomain = getSubdomain({ $hostname: hostname });
+  const subdomain = getSubdomain({ hostname });
 
-  const matchedRoute = getMatchedRoute({ $pathname: pathname });
+  const matchedRoute = getMatchedRoute({ pathname });
 
   if (!matchedRoute) {
     return NextResponse.next();
@@ -25,22 +25,22 @@ export function middleware(request) {
   switch (restriction) {
     case RESTRICTION_TYPES.SUBDOMAIN:
       return handleSubdomainRestriction({
-        $request: request,
-        $route: matchedRoute,
-        $subdomain: subdomain,
+        request,
+        route: matchedRoute,
+        subdomain,
       });
 
     case RESTRICTION_TYPES.AUTH:
       return handleAuthRestriction({
-        $request: request,
-        $route: matchedRoute,
+        request,
+        route: matchedRoute,
       });
 
     case RESTRICTION_TYPES.SUBDOMAIN_AND_AUTH:
       return handleSubdomainAndAuthRestriction({
-        $request: request,
-        $route: matchedRoute,
-        $subdomain: subdomain,
+        request,
+        route: matchedRoute,
+        subdomain,
       });
 
     default:

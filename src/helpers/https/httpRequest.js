@@ -3,36 +3,36 @@ import { configHeader } from "@helpers/https/configHeader";
 const API_ENDPOINT = process.env.API_ENDPOINT;
 
 export const httpRequest = async ({
-  $method = "post",
-  $apiVersions = "v1",
-  $externalUrl = null,
-  $path = null,
-  $data = null,
-  $useAuthToken = true,
-  $isFormData = false,
-  $cache = "no-cache",
+  method = "post",
+  apiVersions = "v1",
+  externalUrl = null,
+  path = null,
+  data = null,
+  useAuthToken = true,
+  isFormData = false,
+  cache = "no-cache",
 } = {}) => {
   try {
-    const payload = $data
-      ? $isFormData
-        ? $data
-        : JSON.stringify($data)
+    const payload = data
+      ? isFormData
+        ? data
+        : JSON.stringify(data)
       : undefined;
 
-    const url = $externalUrl
-      ? $externalUrl
-      : `${API_ENDPOINT}/${$apiVersions}${$path}`;
+    const url = externalUrl
+      ? externalUrl
+      : `${API_ENDPOINT}/${apiVersions}${path}`;
 
     const headers = await configHeader({
-      $isFormData,
-      $useAuthToken,
+      isFormData,
+      useAuthToken,
     });
 
     const response = await fetch(url, {
-      method: $method,
+      method,
       body: payload,
       headers,
-      cache: $cache,
+      cache,
     });
 
     const result = await response.json();

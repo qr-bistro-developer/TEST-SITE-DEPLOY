@@ -6,7 +6,7 @@ import { FONT_FAMILIES } from "@statics/fonts";
 
 const ALL_FONTS = _.values(FONT_FAMILIES);
 
-export const useFontLoader = ({ $fonts = [], $loadAll = false } = {}) => {
+export const useFontLoader = ({ fonts = [], loadAll = false } = {}) => {
   const [fontsLoaded, setFontsLoaded] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
 
@@ -21,7 +21,7 @@ export const useFontLoader = ({ $fonts = [], $loadAll = false } = {}) => {
         setIsLoading(true);
         await document.fonts.ready;
 
-        const fontsToLoad = $loadAll ? ALL_FONTS : $fonts;
+        const fontsToLoad = loadAll ? ALL_FONTS : fonts;
 
         if (_.isEmpty(fontsToLoad)) {
           setFontsLoaded(true);
@@ -45,7 +45,7 @@ export const useFontLoader = ({ $fonts = [], $loadAll = false } = {}) => {
     };
 
     loadFonts();
-  }, [$fonts, $loadAll]);
+  }, [fonts, loadAll]);
 
   return { fontsLoaded, isLoading };
 };

@@ -9,7 +9,6 @@
       "@helpers/*": ["./src/helpers/*"],
       "@hooks/*": ["./src/hooks/*"],
       "@lib/*": ["./src/lib/*"],
-      "@redux/*": ["./src/redux/*"],
       "@statics/*": ["./src/statics/*"],
       "@store/*": ["./src/store/*"],
       "@styles/*": ["./src/styles/*"],

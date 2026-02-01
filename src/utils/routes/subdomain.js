@@ -1,7 +1,7 @@
 import _ from "lodash";
 
-export const getSubdomain = ({ $hostname = "" }) => {
-  const host = _.get($hostname.split(":"), [0], "");
+export const getSubdomain = ({ hostname = "" } = {}) => {
+  const host = _.get(hostname.split(":"), [0], "");
 
   if (host === "localhost" || host === "127.0.0.1") {
     return null;

@@ -27,12 +27,12 @@
 
 import styled, { css } from "styled-components";
 import { COLOR_DARK } from "@/statics/colors";
-import { resolveFontFamily } from "@/utils/resolve";
+import { resolveFontFamily } from "@utils/resolve/resolveFontFamily";
 
 export const Text = styled.span`
   color: ${({ $color = COLOR_DARK }) => $color};
   font-family: ${({ $fontFamily = "niramit" }) =>
-    resolveFontFamily({ $fontFamily })};
+    resolveFontFamily({ fontFamily: $fontFamily })};
   font-weight: ${({ $fontWeight = 400 }) => $fontWeight};
   font-size: ${({ $fontSize = 16 }) => `${$fontSize}px`};
 

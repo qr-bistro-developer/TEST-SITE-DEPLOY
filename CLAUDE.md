@@ -23,10 +23,13 @@ src/
 │   └── fonts/     # Font definitions (next/font)
 ├── components/    # Reusable React components
 ├── contexts/      # React contexts & providers
+├── helpers/       # Helper functions (httpRequest, etc.)
 ├── hooks/         # Custom React hooks
-├── lib/           # Library configurations (registry, cookieStorage)
-├── redux/         # Redux store and reducers
+├── lib/           # Library configurations (registry)
 ├── statics/       # Static data/constants
+├── store/         # Redux store, reducers, and cookie storage
+│   ├── cookies/   # Cookie utilities (client, server, shared)
+│   └── reducers/  # Redux reducers
 ├── styles/        # Global CSS styles
 └── utils/         # Utility functions
     └── routes/    # Route utilities (subdomain, restrictions)
@@ -36,7 +39,6 @@ src/
 
 ```javascript
 @/*          -> ./src/*
-@redux/*     -> ./src/redux/*
 @components/* -> ./src/components/*
 @lib/*       -> ./src/lib/*
 @utils/*     -> ./src/utils/*
@@ -44,17 +46,29 @@ src/
 @assets/*    -> ./src/assets/*
 @contexts/*  -> ./src/contexts/*
 @statics/*   -> ./src/statics/*
+@helpers/*   -> ./src/helpers/*
+@store/*     -> ./src/store/*
 ```
 
 ## Coding Conventions
 
-### 1. Function Parameters
-- Always use destructuring parameters with `$` prefix
-- Always provide default values
+### 1. Parameter Naming Convention
 
+#### React Components - ใช้ `$` prefix
 ```javascript
 export const MyComponent = ({ $prop1 = null, $prop2 = false }) => {
   return <div>{$prop1}</div>;
+};
+```
+
+#### Functions/Helpers - ไม่ใช้ `$` prefix
+```javascript
+export const httpRequest = async ({
+  method = "post",
+  path = null,
+  data = null,
+} = {}) => {
+  // implementation
 };
 ```
 
@@ -169,20 +183,21 @@ export async function generateMetadata({ params }) {
 - Cookie prefix: `QR_BISTRO_`
 
 ```javascript
-import { store, persistor } from "@redux/store";
+import { store, persistor } from "@store/store";
 ```
 
 ### Cookie Storage
 Data is stored in cookies with AES encryption using `crypto-js`:
-- `src/lib/cookieStorage.js` - Custom cookie storage for redux-persist
-- Set `NEXT_PUBLIC_PERSIST_SECRET` env variable for custom encryption key
+- `src/store/cookies/client.js` - Client-side cookie storage
+- `src/store/cookies/server.js` - Server-side cookie storage
+- Set `PRIVATE_SECRET_KEY` env variable for custom encryption key
 
 ```javascript
-// Named exports
-import { getCookieStorage, setCookieStorage, removeCookieStorage } from "@lib/cookieStorage";
+// Client-side (use client)
+import { getCookieStorage, setCookieStorage, removeCookieStorage, cookieStorage } from "@store/cookies/client";
 
-// For redux-persist
-import { cookieStorage } from "@lib/cookieStorage";
+// Server-side (Server Components)
+import { getServerCookie, setServerCookie, removeServerCookie } from "@store/cookies/server";
 ```
 
 ### Creating Reducers
@@ -246,11 +261,11 @@ import { FONT_FAMILIES } from "@statics/fonts";
 const MyPage = () => {
   // โหลด font เฉพาะ
   const { fontsLoaded, isLoading } = useFontLoader({
-    $fonts: [FONT_FAMILIES.IBM_PLEX_SANS_THAI],
+    fonts: [FONT_FAMILIES.IBM_PLEX_SANS_THAI],
   });
 
   // โหลดทุก fonts (สำหรับ editor)
-  const { fontsLoaded } = useFontLoader({ $loadAll: true });
+  const { fontsLoaded } = useFontLoader({ loadAll: true });
 
   if (isLoading) return <Loading />;
   return <Content />;

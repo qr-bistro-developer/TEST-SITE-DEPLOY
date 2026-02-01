@@ -1,6 +1,6 @@
-export const resolveSize = ({ $value = "auto" }) => {
-  if ($value === "auto" || $value === "100%") {
-    return $value;
+export const resolveSize = ({ value = "auto" } = {}) => {
+  if (value === "auto" || value === "100%") {
+    return value;
   }
-  return `${$value}px`;
+  return `${value}px`;
 };
