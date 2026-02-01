@@ -4,7 +4,7 @@ const API_ENDPOINT = process.env.API_ENDPOINT;
 
 export const httpRequest = async ({
   method = "post",
-  apiVersions = "v1",
+  apiVersions = "demo",
   externalUrl = null,
   path = null,
   data = null,
@@ -41,7 +41,7 @@ export const httpRequest = async ({
     }
 
     const response = await fetch(url, fetchOptions);
-
+    console.log("response :>> ", response);
     const result = await response.json();
     return result;
   } catch (error) {
