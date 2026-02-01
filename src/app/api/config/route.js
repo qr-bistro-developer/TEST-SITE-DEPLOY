@@ -1,4 +1,6 @@
-export const GET = async (params) => {
+export const dynamic = "force-dynamic";
+
+export const GET = async () => {
   return Response.json({
     API_ENDPOINT: process.env.API_ENDPOINT,
     API_KEY: process.env.API_KEY,
