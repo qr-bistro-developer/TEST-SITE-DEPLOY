@@ -3,14 +3,17 @@
     "baseUrl": ".",
     "paths": {
       "@/*": ["./src/*"],
-      "@redux/*": ["./src/redux/*"],
-      "@components/*": ["./src/components/*"],
-      "@lib/*": ["./src/lib/*"],
-      "@utils/*": ["./src/utils/*"],
-      "@styles/*": ["./src/styles/*"],
       "@assets/*": ["./src/assets/*"],
+      "@components/*": ["./src/components/*"],
       "@contexts/*": ["./src/contexts/*"],
-      "@statics/*": ["./src/statics/*"]
+      "@helpers/*": ["./src/helpers/*"],
+      "@hooks/*": ["./src/hooks/*"],
+      "@lib/*": ["./src/lib/*"],
+      "@redux/*": ["./src/redux/*"],
+      "@statics/*": ["./src/statics/*"],
+      "@store/*": ["./src/store/*"],
+      "@styles/*": ["./src/styles/*"],
+      "@utils/*": ["./src/utils/*"]
     }
   }
 }

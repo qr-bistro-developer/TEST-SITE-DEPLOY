@@ -3,8 +3,8 @@
 import { Provider } from "react-redux";
 import { PersistGate } from "redux-persist/integration/react";
 import { store, persistor } from "@redux/store";
-import StyledComponentsRegistry from "@lib/registry";
 import { ConfigProvider } from "@/contexts/Config/ConfigProvider";
+import { StyledComponentsRegistry } from "@/contexts/StyledComponentsRegistry";
 
 export const ContextProvider = ({ children = null }) => {
   return (

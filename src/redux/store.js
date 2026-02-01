@@ -9,7 +9,7 @@ import {
   PURGE,
   REGISTER,
 } from "redux-persist";
-import { cookieStorage } from "@lib/cookieStorage";
+import { cookieStorage } from "@/store/cookies";
 import guide from "@redux/reducers/guide.reducers";
 import accessToken from "@redux/reducers/accessToken.reducers";
 
