@@ -11,7 +11,7 @@ import {
 
 export function middleware(request) {
   const { pathname } = request.nextUrl;
-  const hostname = _.get(request, ["headers", "get"], () => "")("host") || "";
+  const hostname = request.headers.get("host") || "";
   const subdomain = getSubdomain({ $hostname: hostname });
 
   const matchedRoute = getMatchedRoute({ $pathname: pathname });

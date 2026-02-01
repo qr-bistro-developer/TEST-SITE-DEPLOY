@@ -1,9 +1,11 @@
 import "@/styles/globals.css";
-import { niramit, anuphan, kanit } from "@/lib/fonts";
-import Providers from "@/lib/providers";
+import { ibmPlexSansThai } from "@assets/fonts";
+import { ContextProvider } from "@/contexts";
 
 export const metadata = {
-  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000"),
+  metadataBase: new URL(
+    process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000",
+  ),
   title: {
     default: "QR Bistro - Smart Restaurant Solution",
     template: "%s | QR Bistro",
@@ -72,20 +74,13 @@ export const viewport = {
   width: "device-width",
   initialScale: 1,
   maximumScale: 5,
-  themeColor: [
-    { media: "(prefers-color-scheme: light)", color: "#ffffff" },
-    { media: "(prefers-color-scheme: dark)", color: "#0a0a0a" },
-  ],
 };
 
 export default function RootLayout({ children }) {
   return (
-    <html
-      lang="th"
-      className={`${niramit.variable} ${anuphan.variable} ${kanit.variable}`}
-    >
+    <html lang="th" className={ibmPlexSansThai.variable}>
       <body>
-        <Providers>{children}</Providers>
+        <ContextProvider>{children}</ContextProvider>
       </body>
     </html>
   );
