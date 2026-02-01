@@ -34,14 +34,14 @@ export const removeCookieStorage = (key) => {
 };
 
 export const cookieStorage = {
-  getItem: (key) => {
+  getItem: async (key) => {
     const value = getCookieStorage(key);
     return value ? JSON.stringify(value) : null;
   },
-  setItem: (key, value) => {
+  setItem: async (key, value) => {
     setCookieStorage(key, JSON.parse(value));
   },
-  removeItem: (key) => {
+  removeItem: async (key) => {
     removeCookieStorage(key);
   },
 };

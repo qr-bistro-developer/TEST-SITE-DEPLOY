@@ -11,10 +11,8 @@ export const configHeader = async ({
   useAuthToken = true,
 }) => {
   const token = await getServerCookie("accessToken");
-  console.log("token :>> ", token);
-  const authorization = useAuthToken
-    ? { Authorization: `Bearer ${token}` }
-    : {};
+  const authorization =
+    useAuthToken && token ? { Authorization: `Bearer ${token}` } : {};
   const contentType = isFormData
     ? { "Content-Type": "multipart/form-data" }
     : { "Content-Type": "application/json" };
