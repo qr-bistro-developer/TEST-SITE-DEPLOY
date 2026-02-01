@@ -3,8 +3,8 @@
 import Cookies from "js-cookie";
 import CryptoJS from "crypto-js";
 
-const SECRET_KEY =
-  process.env.NEXT_PUBLIC_PERSIST_SECRET || "qr-bistro-secret-key";
+const SECRET_KEY = process.env.PRIVATE_SECRET_KEY || "qr-bistro-secret-key";
+
 const COOKIE_PREFIX = "QR_BISTRO_";
 
 const encrypt = ({ $data }) => {
@@ -90,7 +90,6 @@ export const removeCookieStorage = ({ $key = "" }) => {
   }
 };
 
-// For redux-persist compatibility
 export const cookieStorage = {
   getItem: (key) => getCookieStorage({ $key: key }),
   setItem: (key, value) => setCookieStorage({ $key: key, $value: value }),

@@ -3,9 +3,9 @@ import { ibmPlexSansThai } from "@assets/fonts";
 import { ContextProvider } from "@/contexts";
 
 export const metadata = {
-  metadataBase: new URL(
-    process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000",
-  ),
+  // metadataBase: new URL(
+  //   process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000",
+  // ),
   title: {
     default: "QR Bistro - Smart Restaurant Solution",
     template: "%s | QR Bistro",
@@ -65,9 +65,9 @@ export const metadata = {
       "max-snippet": -1,
     },
   },
-  verification: {
-    google: process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION,
-  },
+  // verification: {
+  //   google: process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION,
+  // },
 };
 
 export const viewport = {
