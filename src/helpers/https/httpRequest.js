@@ -1,7 +1,6 @@
 import { configHeader } from "@helpers/https/configHeader";
 
 const API_ENDPOINT = process.env.API_ENDPOINT;
-const API_KEY = process.env.API_KEY;
 
 export const httpRequest = async ({
   method = "post",
@@ -11,11 +10,9 @@ export const httpRequest = async ({
   data = null,
   useAuthToken = true,
   isFormData = false,
-  cache = "no-cache",
+  cacheTime = 0,
 } = {}) => {
   try {
-    console.log("API_KEY :>> ", API_KEY);
-    console.log("API_ENDPOINT :>> ", API_ENDPOINT);
     const payload = data
       ? isFormData
         ? data
@@ -26,17 +23,24 @@ export const httpRequest = async ({
       ? externalUrl
       : `${API_ENDPOINT}/${apiVersions}${path}`;
 
-    // const headers = await configHeader({
-    //   isFormData,
-    //   useAuthToken,
-    // });
+    const headers = await configHeader({
+      isFormData,
+      useAuthToken,
+    });
 
-    const response = await fetch(url, {
+    const fetchOptions = {
       method,
       body: payload,
-      // headers,
-      cache,
-    });
+      headers,
+    };
+
+    if (cacheTime > 0) {
+      fetchOptions.next = { revalidate: cacheTime };
+    } else {
+      fetchOptions.cache = "no-store";
+    }
+
+    const response = await fetch(url, fetchOptions);
 
     const result = await response.json();
     return result;

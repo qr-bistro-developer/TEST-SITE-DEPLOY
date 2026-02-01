@@ -5,7 +5,8 @@
       "Bash(yarn build:*)",
       "Bash(yarn add:*)",
       "Bash(yarn lint:*)",
-      "Bash(npx eslint:*)"
+      "Bash(npx eslint:*)",
+      "Bash(yarn remove:*)"
     ]
   }
 }

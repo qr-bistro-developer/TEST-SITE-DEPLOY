@@ -9,19 +9,17 @@ import {
   PURGE,
   REGISTER,
 } from "redux-persist";
-import { cookieStorage } from "@store/cookies/client";
-import guide from "@store/reducers/guide.reducers";
-import accessToken from "@store/reducers/accessToken.reducers";
+import { persistorStorage } from "@store/cookies/persistorStore";
+import guide from "@/store/redux/reducers/guide.reducers";
 
 const rootReducer = combineReducers({
   guide,
-  accessToken,
 });
 
 const persistConfig = {
   key: "root",
   version: 1,
-  storage: cookieStorage,
+  storage: persistorStorage,
   whitelist: ["guide", "accessToken"],
 };
 

@@ -2,7 +2,7 @@
 
 import { Provider } from "react-redux";
 import { PersistGate } from "redux-persist/integration/react";
-import { store, persistor } from "@store/store";
+import { store, persistor } from "@/store/redux/store";
 import { StyledComponentsRegistry } from "@/contexts/StyledComponentsRegistry";
 
 export const ContextProvider = ({ children = null }) => {
