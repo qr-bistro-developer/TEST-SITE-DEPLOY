@@ -23,15 +23,15 @@ export const httpRequest = async ({
       ? externalUrl
       : `${API_ENDPOINT}/${apiVersions}${path}`;
 
-    const headers = await configHeader({
-      isFormData,
-      useAuthToken,
-    });
+    // const headers = await configHeader({
+    //   isFormData,
+    //   useAuthToken,
+    // });
 
     const response = await fetch(url, {
       method,
       body: payload,
-      headers,
+      // headers,
       cache,
     });
 

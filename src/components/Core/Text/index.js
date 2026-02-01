@@ -27,19 +27,19 @@
 
 import styled, { css } from "styled-components";
 import { COLOR_DARK } from "@/statics/colors";
-import { resolveFontFamily } from "@utils/resolve/resolveFontFamily";
+import { FONT_FAMILIES } from "@/statics/fonts";
+import { resolveSize } from "@/utils/resolve/resolveSize";
 
 export const Text = styled.span`
   color: ${({ $color = COLOR_DARK }) => $color};
-  font-family: ${({ $fontFamily = "niramit" }) =>
-    resolveFontFamily({ fontFamily: $fontFamily })};
+  font-family: ${({ $fontFamily = FONT_FAMILIES.IBM_PLEX_SANS_THAI }) =>
+    $fontFamily};
   font-weight: ${({ $fontWeight = 400 }) => $fontWeight};
   font-size: ${({ $fontSize = 16 }) => `${$fontSize}px`};
 
   opacity: ${({ $disabled = false, $opacity = 1 }) =>
     $disabled ? 0.5 : $opacity};
-  width: ${({ $width = "auto" }) =>
-    $width === "auto" ? "auto" : `${$width}px`};
+  width: ${({ $width = "auto" }) => resolveSize({ value: $width })};
 
   text-decoration: ${({ $decorationLine = "none" }) => $decorationLine};
   text-transform: ${({ $textTransform = "none" }) => $textTransform};

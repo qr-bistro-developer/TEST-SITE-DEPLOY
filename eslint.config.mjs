@@ -10,6 +10,7 @@ const eslintConfig = defineConfig([
       import: importPlugin,
     },
     rules: {
+      "no-undef": "error",
       "no-unused-vars": "warn",
       "no-console": "off",
       "react/react-in-jsx-scope": "off",
@@ -19,6 +20,8 @@ const eslintConfig = defineConfig([
       "react/jsx-uses-vars": "warn",
       "arrow-parens": ["error", "always"],
       "import/no-unresolved": "error",
+      "@next/next/no-async-client-component": "off",
+      "react-hooks/set-state-in-effect": "off",
     },
     settings: {
       "import/resolver": {
