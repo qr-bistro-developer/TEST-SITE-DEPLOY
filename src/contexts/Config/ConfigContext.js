@@ -2,7 +2,7 @@ import { createContext, useContext } from "react";
 
 const ConfigContext = createContext();
 
-export const useSocketContext = () => {
+export const useConfig = () => {
   return useContext(ConfigContext);
 };
 

@@ -8,7 +8,7 @@ export const ConfigProvider = ({ children }) => {
     });
   });
   if (isLoading) {
-    return <div>Loading...</div>;
+    return null;
   }
 
   return (
