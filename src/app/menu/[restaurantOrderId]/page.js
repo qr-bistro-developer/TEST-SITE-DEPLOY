@@ -2,12 +2,9 @@ import { headers } from "next/headers";
 import _ from "lodash";
 
 const MenuRestaurant = async ({ params = {} }) => {
-  // ดึง subdomain จาก middleware
   const headersList = await headers();
-  const subdomain = headersList.get("x-subdomain") || "";
-
-  // ดึง restaurantOrderId จาก URL params
   const { restaurantOrderId = "" } = await params;
+  const subdomain = headersList.get("x-subdomain") || "";
 
   return (
     <div>

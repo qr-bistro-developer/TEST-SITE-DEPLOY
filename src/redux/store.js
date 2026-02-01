@@ -11,16 +11,18 @@ import {
 } from "redux-persist";
 import { cookieStorage } from "@lib/cookieStorage";
 import guide from "@redux/reducers/guide.reducers";
+import accessToken from "@redux/reducers/accessToken.reducers";
 
 const rootReducer = combineReducers({
   guide,
+  accessToken,
 });
 
 const persistConfig = {
   key: "root",
   version: 1,
   storage: cookieStorage,
-  whitelist: ["guide"],
+  whitelist: ["guide", "accessToken"],
 };
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);
