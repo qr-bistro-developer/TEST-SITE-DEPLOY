@@ -23,13 +23,15 @@ src/
 │   └── fonts/     # Font definitions (next/font)
 ├── components/    # Reusable React components
 ├── contexts/      # React contexts & providers
-├── helpers/       # Helper functions (httpRequest, etc.)
+├── helpers/       # Helper functions
+│   └── https/     # HTTP utilities (httpRequest, configHeader)
 ├── hooks/         # Custom React hooks
 ├── lib/           # Library configurations (registry)
 ├── statics/       # Static data/constants
-├── store/         # Redux store, reducers, and cookie storage
-│   ├── cookies/   # Cookie utilities (client, server, shared)
-│   └── reducers/  # Redux reducers
+├── store/         # Redux store and cookie storage
+│   ├── cookies/   # Cookie utilities (accessToken, persistorStore)
+│   └── redux/     # Redux store and reducers
+│       └── reducers/
 ├── styles/        # Global CSS styles
 └── utils/         # Utility functions
     └── routes/    # Route utilities (subdomain, restrictions)
@@ -179,28 +181,16 @@ export async function generateMetadata({ params }) {
 
 ### Store Configuration
 - Uses Redux Toolkit with Redux Persist
-- Persists to **Cookie Storage** with AES encryption (SSR-safe)
+- Persists to Cookie Storage (SSR-safe)
 - Cookie prefix: `QR_BISTRO_`
 
 ```javascript
-import { store, persistor } from "@store/store";
+import { store, persistor } from "@store/redux/store";
 ```
 
-### Cookie Storage
-Data is stored in cookies with AES encryption using `crypto-js`:
-- `src/store/cookies/client.js` - Client-side cookie storage
-- `src/store/cookies/server.js` - Server-side cookie storage
-- Set `PRIVATE_SECRET_KEY` env variable for custom encryption key
+### Reducers Location
+Reducers อยู่ที่ `src/store/redux/reducers/`:
 
-```javascript
-// Client-side (use client)
-import { getCookieStorage, setCookieStorage, removeCookieStorage, cookieStorage } from "@store/cookies/client";
-
-// Server-side (Server Components)
-import { getServerCookie, setServerCookie, removeServerCookie } from "@store/cookies/server";
-```
-
-### Creating Reducers
 ```javascript
 import { createSlice } from "@reduxjs/toolkit";
 import _ from "lodash";
@@ -219,6 +209,121 @@ export const slice = createSlice({
 
 export const { setData } = slice.actions;
 export default slice.reducer;
+```
+
+## Cookie Storage
+
+### Access Token (Server-side, httpOnly)
+สำหรับ Authentication Token - ใช้ httpOnly cookies เพื่อความปลอดภัย:
+- `src/store/cookies/accessToken.js` - Server Actions สำหรับจัดการ token
+
+```javascript
+// เรียกใช้ใน Server Components หรือ Server Actions เท่านั้น
+import { getAccessToken, setAccessToken, removeAccessToken } from "@store/cookies/accessToken";
+
+// ตั้งค่า token หลัง login
+await setAccessToken("your-jwt-token");
+
+// ดึง token
+const token = await getAccessToken();
+
+// ลบ token (logout)
+await removeAccessToken();
+```
+
+**หมายเหตุ:** Access Token ใช้ httpOnly cookie ทำให้:
+- JavaScript ฝั่ง client ไม่สามารถเข้าถึงได้ (ป้องกัน XSS)
+- ส่งไปกับทุก request อัตโนมัติ
+- ใช้งานได้เฉพาะใน Server Components/Actions
+
+### Persistor Store (Client-side)
+สำหรับ Redux Persist และข้อมูลทั่วไปฝั่ง client:
+- `src/store/cookies/persistorStore.js` - Client-side cookie utilities
+
+```javascript
+"use client";
+
+import {
+  getPersistorStore,
+  setPersistorStore,
+  removePersistorStore,
+  persistorStorage  // สำหรับ Redux Persist
+} from "@store/cookies/persistorStore";
+
+// ใช้งานทั่วไป
+getPersistorStore("myKey");
+setPersistorStore("myKey", { data: "value" });
+removePersistorStore("myKey");
+```
+
+## HTTP Request
+
+### Configuration
+HTTP utilities อยู่ที่ `src/helpers/https/`:
+
+```javascript
+import { httpRequest } from "@helpers/https/httpRequest";
+
+// Basic usage
+const result = await httpRequest({
+  method: "post",
+  apiVersions: "v1",
+  path: "/users",
+  data: { name: "John" },
+});
+
+// Without auth token
+const publicData = await httpRequest({
+  method: "get",
+  path: "/public/menu",
+  useAuthToken: false,
+});
+
+// With caching
+const cachedData = await httpRequest({
+  method: "get",
+  path: "/categories",
+  cacheTime: 3600, // 1 hour
+});
+
+// Form data upload
+const uploadResult = await httpRequest({
+  method: "post",
+  path: "/upload",
+  data: formData,
+  isFormData: true,
+});
+
+// External URL
+const externalData = await httpRequest({
+  externalUrl: "https://api.example.com/data",
+  method: "get",
+});
+```
+
+### httpRequest Parameters
+| Parameter | Type | Default | Description |
+|-----------|------|---------|-------------|
+| method | string | "post" | HTTP method (get, post, put, delete) |
+| apiVersions | string | "demo" | API version prefix |
+| path | string | null | API path (e.g., "/users") |
+| data | object | null | Request body |
+| useAuthToken | boolean | true | Include Bearer token in headers |
+| isFormData | boolean | false | Set true for FormData uploads |
+| cacheTime | number | 0 | Cache duration in seconds (0 = no cache) |
+| externalUrl | string | null | Use external URL instead of API_ENDPOINT |
+
+### Config Header
+สร้าง headers อัตโนมัติพร้อม Bearer token:
+
+```javascript
+import { configHeader } from "@helpers/https/configHeader";
+
+const headers = await configHeader({
+  isFormData: false,
+  useAuthToken: true,
+});
+// Returns: { "x-key": "...", "Content-Type": "application/json", "Authorization": "Bearer ..." }
 ```
 
 ## Styled Components SSR
@@ -277,9 +382,13 @@ const MyPage = () => {
 ## Environment Variables
 
 ```env
+# API Configuration (Server-side only)
+API_ENDPOINT=https://api.your-domain.com
+API_KEY=your-api-key
+
+# Public Variables (Available in client)
 NEXT_PUBLIC_SITE_URL=https://your-domain.com
 NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION=your-verification-code
-NEXT_PUBLIC_PERSIST_SECRET=your-encryption-key
 ```
 
 ## Commands
@@ -309,13 +418,15 @@ rm src/new-folder/.gitkeep
 
 1. **SSR Compatibility:** All client-side code must be in "use client" components
 2. **State Hydration:** Redux Persist handles state rehydration with cookie storage
-3. **Font Loading:** Main font (IBM Plex Sans Thai) is preloaded, others are lazy loaded
-4. **SEO:** Always add metadata to new pages
-5. **Accessibility:** Use semantic HTML and ARIA attributes
-6. **.gitkeep:** ลบ .gitkeep เมื่อ folder มีไฟล์แล้ว
-7. **No index.js:** ไม่สร้าง index.js สำหรับ re-export
+3. **Access Token:** ใช้ httpOnly cookies ผ่าน Server Actions (ไม่สามารถเข้าถึงจาก client-side JS)
+4. **HTTP Requests:** ใช้ `httpRequest` helper ซึ่งจะ inject Bearer token อัตโนมัติ
+5. **Font Loading:** Main font (IBM Plex Sans Thai) is preloaded, others are lazy loaded
+6. **SEO:** Always add metadata to new pages
+7. **Accessibility:** Use semantic HTML and ARIA attributes
+8. **.gitkeep:** ลบ .gitkeep เมื่อ folder มีไฟล์แล้ว
+9. **No index.js:** ไม่สร้าง index.js สำหรับ re-export
 
 ---
 
-**Version:** 1.2.0
+**Version:** 1.3.0
 **Last Updated:** February 2025

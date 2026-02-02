@@ -472,6 +472,8 @@ export const transformProductForDisplay = ({ $product = null }) => {
 - [ ] Destructure props ใน styled-components template literals
 - [ ] กำหนด default values สำหรับทุก prop
 - [ ] ใช้ `fitPx({ px: X, dt: 'h', sf: true })` เสมอ (dt: 'h' เท่านั้น)
+- [ ] ใช้ `httpRequest` สำหรับ API calls (inject Bearer token อัตโนมัติ)
+- [ ] Access Token ใช้ผ่าน Server Actions เท่านั้น (`@store/cookies/accessToken`)
 
 ---
 
@@ -487,7 +489,7 @@ export const transformProductForDisplay = ({ $product = null }) => {
 ---
 
 **Last Updated:** 1 กุมภาพันธ์ 2569
-**Version:** 1.1.0
+**Version:** 1.2.0
 
 ---
 
@@ -823,27 +825,116 @@ const EditorPage = () => {
 
 ## 12. Cookie Storage
 
-### Named Exports
+### Access Token (Server-side, httpOnly)
+
+สำหรับ Authentication Token - ใช้ httpOnly cookies เพื่อความปลอดภัย:
 
 ```javascript
-import {
-  getCookieStorage,
-  setCookieStorage,
-  removeCookieStorage,
-} from "@store/cookies/client";
+// ✅ ถูกต้อง - เรียกใช้ใน Server Components/Actions เท่านั้น
+import { getAccessToken, setAccessToken, removeAccessToken } from "@store/cookies/accessToken";
 
-// ใช้งาน
-getCookieStorage("myKey");
-setCookieStorage("myKey", data);
-removeCookieStorage("myKey");
+// ตั้งค่า token หลัง login
+await setAccessToken("your-jwt-token");
+
+// ดึง token
+const token = await getAccessToken();
+
+// ลบ token (logout)
+await removeAccessToken();
+```
+
+### Persistor Store (Client-side)
+
+สำหรับ Redux Persist และข้อมูลทั่วไปฝั่ง client:
+
+```javascript
+"use client";
+
+import {
+  getPersistorStore,
+  setPersistorStore,
+  removePersistorStore,
+  persistorStorage  // สำหรับ Redux Persist
+} from "@store/cookies/persistorStore";
+
+// ใช้งานทั่วไป
+getPersistorStore("myKey");
+setPersistorStore("myKey", { data: "value" });
+removePersistorStore("myKey");
 ```
 
 ### For Redux Persist
 
 ```javascript
-import { cookieStorage } from "@store/cookies/client";
+import { persistorStorage } from "@store/cookies/persistorStore";
 
 const persistConfig = {
-  storage: cookieStorage,
+  storage: persistorStorage,
 };
+```
+
+---
+
+## 13. HTTP Request
+
+### Basic Usage
+
+```javascript
+import { httpRequest } from "@helpers/https/httpRequest";
+
+// ✅ ถูกต้อง - POST request พร้อม auth token
+const result = await httpRequest({
+  method: "post",
+  apiVersions: "v1",
+  path: "/users",
+  data: { name: "John" },
+});
+
+// ✅ ถูกต้อง - GET request ไม่ใช้ auth token
+const publicData = await httpRequest({
+  method: "get",
+  path: "/public/menu",
+  useAuthToken: false,
+});
+
+// ✅ ถูกต้อง - GET request พร้อม cache
+const cachedData = await httpRequest({
+  method: "get",
+  path: "/categories",
+  cacheTime: 3600, // 1 hour
+});
+
+// ✅ ถูกต้อง - Upload FormData
+const uploadResult = await httpRequest({
+  method: "post",
+  path: "/upload",
+  data: formData,
+  isFormData: true,
+});
+```
+
+### Parameters
+
+| Parameter | Type | Default | Description |
+|-----------|------|---------|-------------|
+| method | string | "post" | HTTP method |
+| apiVersions | string | "demo" | API version prefix |
+| path | string | null | API path |
+| data | object | null | Request body |
+| useAuthToken | boolean | true | Include Bearer token |
+| isFormData | boolean | false | For FormData uploads |
+| cacheTime | number | 0 | Cache duration in seconds |
+| externalUrl | string | null | Use external URL |
+
+### Config Header
+
+```javascript
+import { configHeader } from "@helpers/https/configHeader";
+
+// สร้าง headers อัตโนมัติ
+const headers = await configHeader({
+  isFormData: false,
+  useAuthToken: true,
+});
+// Returns: { "x-key": "...", "Content-Type": "application/json", "Authorization": "Bearer ..." }
 ```
