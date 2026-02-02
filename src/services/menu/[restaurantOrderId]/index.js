@@ -10,9 +10,6 @@ export const getMenuList = async ({ payload }) => {
     path: `${REQUEST_MAIN_PATH}/get-menu-list`,
     data: payload,
   });
-
-  console.log("payload :>> ", payload);
-
   const result = _.get(response, ["result"], []);
   const categories = _.chain(result)
     .map((item) => {
