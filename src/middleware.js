@@ -1,13 +1,13 @@
 import { NextResponse } from "next/server";
 import _ from "lodash";
 import { RESTRICTION_TYPES } from "@statics/restrictedRoutes";
-import { getSubdomain } from "@utils/routes/subdomain";
+import { getSubdomain } from "@middlewares/subdomain";
 import {
   getMatchedRoute,
   handleSubdomainRestriction,
   handleAuthRestriction,
   handleSubdomainAndAuthRestriction,
-} from "@utils/routes/restrictions";
+} from "@middlewares/restrictions";
 
 export function middleware(request) {
   const { pathname } = request.nextUrl;

@@ -735,8 +735,8 @@ src/components/
 
 ```javascript
 // ✅ ถูกต้อง - import ตรงจากไฟล์
-import { getSubdomain } from "@utils/routes/subdomain";
-import { handleSubdomainRestriction } from "@utils/routes/restrictions";
+import { getSubdomain } from "@middlewares/subdomain";
+import { handleSubdomainRestriction } from "@middlewares/restrictions";
 import { getCookieStorage } from "@lib/cookieStorage";
 ```
 
@@ -744,7 +744,7 @@ import { getCookieStorage } from "@lib/cookieStorage";
 
 ```javascript
 // ❌ ผิด - import ผ่าน index.js
-import { getSubdomain } from "@utils/routes";
+import { getSubdomain } from "@middlewares";
 import { getCookieStorage } from "@lib";
 ```
 

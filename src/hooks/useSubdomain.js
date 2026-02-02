@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { getSubdomain } from "@utils/routes/subdomain";
+import { getSubdomain } from "@middlewares/subdomain";
 
 export const useSubdomain = () => {
   const [subdomain, setSubdomain] = useState("");

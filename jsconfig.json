@@ -13,7 +13,8 @@
       "@statics/*": ["./src/statics/*"],
       "@store/*": ["./src/store/*"],
       "@styles/*": ["./src/styles/*"],
-      "@utils/*": ["./src/utils/*"]
+      "@utils/*": ["./src/utils/*"],
+      "@middlewares/*": ["./src/middlewares/*"]
     }
   }
 }

@@ -27,6 +27,7 @@ src/
 │   └── https/     # HTTP utilities (httpRequest, configHeader)
 ├── hooks/         # Custom React hooks
 ├── lib/           # Library configurations (registry)
+├── middlewares/   # Middleware functions (subdomain, restrictions)
 ├── statics/       # Static data/constants
 ├── store/         # Redux store and cookie storage
 │   ├── cookies/   # Cookie utilities (accessToken, persistorStore)
@@ -34,22 +35,22 @@ src/
 │       └── reducers/
 ├── styles/        # Global CSS styles
 └── utils/         # Utility functions
-    └── routes/    # Route utilities (subdomain, restrictions)
 ```
 
 ## Path Aliases
 
 ```javascript
-@/*          -> ./src/*
+@/*           -> ./src/*
 @components/* -> ./src/components/*
-@lib/*       -> ./src/lib/*
-@utils/*     -> ./src/utils/*
-@styles/*    -> ./src/styles/*
-@assets/*    -> ./src/assets/*
-@contexts/*  -> ./src/contexts/*
-@statics/*   -> ./src/statics/*
-@helpers/*   -> ./src/helpers/*
-@store/*     -> ./src/store/*
+@lib/*        -> ./src/lib/*
+@utils/*      -> ./src/utils/*
+@styles/*     -> ./src/styles/*
+@assets/*     -> ./src/assets/*
+@contexts/*   -> ./src/contexts/*
+@statics/*    -> ./src/statics/*
+@helpers/*    -> ./src/helpers/*
+@store/*      -> ./src/store/*
+@middlewares/* -> ./src/middlewares/*
 ```
 
 ## Coding Conventions
@@ -98,10 +99,10 @@ const Container = styled.div`
 
 ```javascript
 // ✅ ถูกต้อง
-import { getSubdomain } from "@utils/routes/subdomain";
+import { getSubdomain } from "@middlewares/subdomain";
 
 // ❌ ผิด
-import { getSubdomain } from "@utils/routes";
+import { getSubdomain } from "@middlewares";
 ```
 
 ## Middleware & Route Restrictions
@@ -120,8 +121,8 @@ import { RESTRICTION_TYPES, RESTRICTED_ROUTES } from "@statics/restrictedRoutes"
 
 ### Middleware
 - `src/middleware.js` - ตรวจสอบ route restrictions
-- `src/utils/routes/subdomain.js` - ดึง subdomain จาก hostname
-- `src/utils/routes/restrictions.js` - handlers สำหรับแต่ละ restriction type
+- `src/middlewares/subdomain.js` - ดึง subdomain จาก hostname
+- `src/middlewares/restrictions.js` - handlers สำหรับแต่ละ restriction type
 
 ### การดึง Subdomain ในหน้า
 ```javascript
