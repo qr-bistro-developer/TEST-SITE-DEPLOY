@@ -2,26 +2,23 @@
 
 import { useState, useEffect } from "react";
 import { Provider } from "react-redux";
-import { PersistGate } from "redux-persist/integration/react";
-import { store, persistor } from "@/store/redux/store";
+import { store } from "@/store/redux/store";
 import { StyledComponentsRegistry } from "@/contexts/StyledComponentsRegistry";
 
 export const ContextProvider = ({ children = null }) => {
-  const [isClient, setIsClient] = useState(false);
+  const [isHydrated, setIsHydrated] = useState(false);
 
   useEffect(() => {
-    setIsClient(true);
+    setIsHydrated(true);
   }, []);
 
   return (
     <Provider store={store}>
-      {isClient ? (
-        <PersistGate loading={null} persistor={persistor}>
-          <StyledComponentsRegistry>{children}</StyledComponentsRegistry>
-        </PersistGate>
-      ) : (
-        <StyledComponentsRegistry>{children}</StyledComponentsRegistry>
-      )}
+      <StyledComponentsRegistry>
+        <div suppressHydrationWarning>
+          {isHydrated ? children : null}
+        </div>
+      </StyledComponentsRegistry>
     </Provider>
   );
 };

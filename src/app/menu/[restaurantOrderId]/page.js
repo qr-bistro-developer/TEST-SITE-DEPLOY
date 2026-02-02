@@ -7,10 +7,13 @@ import { useEffect } from "react";
 import { useParams } from "next/navigation";
 import { UnSupportedDevice } from "@/components/Core/UnSupportedDevice";
 import { Text } from "@/components/Core/Text";
-import { httpRequest } from "@helpers/https/httpRequest";
 import { useSubdomain } from "@/hooks/useSubdomain";
 import { useSupportedDevice } from "@/hooks/useSupportedDevice";
 import { BREAKPOINTS } from "@statics/breakpoints";
+import {
+  getMenuAndBuffetExpire,
+  getMenuList,
+} from "@/services/menu/[restaurantOrderId]";
 
 const Container = styled.div`
   display: flex;
@@ -18,6 +21,8 @@ const Container = styled.div`
   width: 100%;
   height: 100vh;
 `;
+
+// const REQUEST_MAIN_PATH = "/restaurant/menu";
 
 const MenuRestaurant = () => {
   const params = useParams();
@@ -28,11 +33,12 @@ const MenuRestaurant = () => {
   const initial = async () => {
     try {
       const payload = { restaurantOrderId };
-      const data = await httpRequest({
-        externalUrl: `https://jsonplaceholder.typicode.com/todos/1`,
-        method: "get",
-      });
-      console.log("data :>> ", data);
+      const [respMenuList, respBuffetExpire] = await Promise.all([
+        getMenuList({ payload }),
+        getMenuAndBuffetExpire({ payload }),
+      ]);
+      console.log("respMenuList :>> ", respMenuList);
+      console.log("respBuffetExpire :>> ", respBuffetExpire);
     } catch (error) {
       console.log("error :>> ", error);
     }
