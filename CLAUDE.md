@@ -29,9 +29,9 @@ src/
 ├── lib/           # Library configurations (registry)
 ├── middlewares/   # Middleware functions (subdomain, restrictions)
 ├── statics/       # Static data/constants
-├── store/         # Redux store and cookie storage
-│   ├── cookies/   # Cookie utilities (accessToken, persistorStore)
-│   └── redux/     # Redux store and reducers
+├── store/         # Redux store and storage utilities
+│   ├── cookies/   # Cookie utilities (accessToken - httpOnly)
+│   └── redux/     # Redux store and reducers (localStorage persist)
 │       └── reducers/
 ├── styles/        # Global CSS styles
 └── utils/         # Utility functions
@@ -182,8 +182,9 @@ export async function generateMetadata({ params }) {
 
 ### Store Configuration
 - Uses Redux Toolkit with Redux Persist
-- Persists to Cookie Storage (SSR-safe)
-- Cookie prefix: `QR_BISTRO_`
+- Persists to localStorage (standard approach)
+- Storage key prefix: `QR_BISTRO`
+- SSR-safe with noop storage fallback on server
 
 ```javascript
 import { store, persistor } from "@store/redux/store";
@@ -237,24 +238,15 @@ await removeAccessToken();
 - ส่งไปกับทุก request อัตโนมัติ
 - ใช้งานได้เฉพาะใน Server Components/Actions
 
-### Persistor Store (Client-side)
-สำหรับ Redux Persist และข้อมูลทั่วไปฝั่ง client:
-- `src/store/cookies/persistorStore.js` - Client-side cookie utilities
+### Redux Persist Storage
+Redux Persist ใช้ **localStorage** (ไม่ใช่ cookies):
+- จัดการผ่าน `src/store/redux/store.js`
+- Storage key: `persist:QR_BISTRO`
+- มี noop storage สำหรับ SSR (server จะไม่มี localStorage)
 
 ```javascript
-"use client";
-
-import {
-  getPersistorStore,
-  setPersistorStore,
-  removePersistorStore,
-  persistorStorage  // สำหรับ Redux Persist
-} from "@store/cookies/persistorStore";
-
-// ใช้งานทั่วไป
-getPersistorStore("myKey");
-setPersistorStore("myKey", { data: "value" });
-removePersistorStore("myKey");
+// ดู state ใน browser devtools
+localStorage.getItem("persist:QR_BISTRO");
 ```
 
 ## HTTP Request

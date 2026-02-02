@@ -9,18 +9,29 @@ import {
   PURGE,
   REGISTER,
 } from "redux-persist";
-import { persistorStorage } from "@store/cookies/persistorStore";
+import createWebStorage from "redux-persist/lib/storage/createWebStorage";
 import guide from "@/store/redux/reducers/guide.reducers";
+
+const createNoopStorage = () => ({
+  getItem: () => Promise.resolve(null),
+  setItem: () => Promise.resolve(),
+  removeItem: () => Promise.resolve(),
+});
+
+const storage =
+  typeof window !== "undefined"
+    ? createWebStorage("local")
+    : createNoopStorage();
 
 const rootReducer = combineReducers({
   guide,
 });
 
 const persistConfig = {
-  key: "root",
+  key: "QR_BISTRO",
   version: 1,
-  storage: persistorStorage,
-  whitelist: ["guide", "accessToken"],
+  storage,
+  whitelist: ["guide"],
 };
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);
