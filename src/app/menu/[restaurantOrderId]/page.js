@@ -40,7 +40,7 @@ const MenuRestaurant = () => {
       console.log("respMenuList :>> ", respMenuList);
       console.log("respBuffetExpire :>> ", respBuffetExpire);
     } catch (error) {
-      console.log("error :>> ", error);
+      console.log("error in initial :>> ", error);
     }
   };
 

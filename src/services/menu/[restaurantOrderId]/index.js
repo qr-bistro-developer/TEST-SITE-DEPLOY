@@ -31,7 +31,7 @@ export const getMenuList = async ({ payload }) => {
       .value();
     return { categories, productWithCategoryKey };
   } catch (error) {
-    console.log("getMenuList error :>> ", error);
+    throw error;
   }
 };
 
@@ -44,6 +44,6 @@ export const getMenuAndBuffetExpire = async ({ payload }) => {
     const resultExpireIn = _.get(response, ["result", "expireIn"], null);
     return resultExpireIn;
   } catch (error) {
-    console.log("getMenuAndBuffetExpire error :>> ", error);
+    throw error;
   }
 };
