@@ -1,10 +1,10 @@
 import { configHeader } from "@helpers/https/configHeader";
+import { createHttpError, isHttpError } from "@helpers/https/httpError";
 
 const API_ENDPOINT = process.env.API_ENDPOINT;
-
 export const httpRequest = async ({
   method = "post",
-  apiVersions = "demo",
+  apiVersions = "v1",
   externalUrl = null,
   path = null,
   data = null,
@@ -12,16 +12,16 @@ export const httpRequest = async ({
   isFormData = false,
   cacheTime = 0,
 } = {}) => {
+  const url = externalUrl
+    ? externalUrl
+    : `${API_ENDPOINT}/${apiVersions}${path}`;
+
   try {
     const payload = data
       ? isFormData
         ? data
         : JSON.stringify(data)
       : undefined;
-
-    const url = externalUrl
-      ? externalUrl
-      : `${API_ENDPOINT}/${apiVersions}${path}`;
 
     const headers = await configHeader({
       isFormData,
@@ -41,9 +41,28 @@ export const httpRequest = async ({
     }
 
     const response = await fetch(url, fetchOptions);
+
+    const contentType = response.headers.get("content-type");
+    if (!contentType?.includes("application/json")) {
+      throw createHttpError(response.status);
+    }
+
     const result = await response.json();
+
+    if (response.status >= 500) {
+      throw createHttpError(response.status);
+    }
+
+    if (response.status === 404) {
+      throw createHttpError(404);
+    }
+
     return result;
   } catch (error) {
-    throw error;
+    if (isHttpError(error)) {
+      throw error;
+    }
+
+    throw createHttpError(0);
   }
 };
