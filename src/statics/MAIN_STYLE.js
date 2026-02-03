@@ -1,0 +1,4 @@
+export const MAIN_STYLE = {
+  BUTTON_DEFAULT_HEIGHT: 52,
+  CONTAINER_GAP: 12,
+};

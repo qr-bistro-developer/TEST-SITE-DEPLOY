@@ -3,7 +3,9 @@
 import { useState, useEffect } from "react";
 import { BREAKPOINTS } from "@statics/breakpoints";
 
-export const useSupportedDevice = ({ maxWidth = BREAKPOINTS.TABLET_MAX } = {}) => {
+export const useSupportedDevice = ({
+  maxWidth = BREAKPOINTS.TABLET_MAX,
+} = {}) => {
   const [isSupported, setIsSupported] = useState(true);
 
   useEffect(() => {
@@ -16,5 +18,5 @@ export const useSupportedDevice = ({ maxWidth = BREAKPOINTS.TABLET_MAX } = {}) =
     return () => window.removeEventListener("resize", checkScreenSize);
   }, [maxWidth]);
 
-  return isSupported;
+  return { isDeviceSupport: isSupported };
 };

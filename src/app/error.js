@@ -30,7 +30,8 @@ const Line = styled.div`
   height: 40px;
   background-color: #171717;
 `;
-const Error = ({ error }) => {
+
+const ClientSide = ({ error }) => {
   const router = useRouter();
   const errorStatus = _.get(error, ["status"], null);
   const errorMessage = _.get(error, ["message"], "Something went wrong");
@@ -68,4 +69,4 @@ const Error = ({ error }) => {
   );
 };
 
-export default Error;
+export default ClientSide;

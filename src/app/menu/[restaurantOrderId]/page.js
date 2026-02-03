@@ -4,30 +4,44 @@ import {
   getMenuList,
 } from "@/services/menu/[restaurantOrderId]";
 import { validateUUID } from "@utils/validateUUID";
+import { ClientRestaurantMenu } from "@/app/menu/[restaurantOrderId]/components/ClientRestaurantMenu";
+import { deviceSupportServer } from "@/helpers/deviceSupport/deviceSupportServer";
+import { ContainerLayout } from "@/components/Core/ContainerLayout";
+import { UnSupportedDevice } from "@/components/Core/UnSupportedDevice";
 
-const MenuRestaurant = async ({ params }) => {
+const ServerSide = async ({ params }) => {
   const { restaurantOrderId } = await params;
   validateUUID({ value: restaurantOrderId });
+
+  const { isDeviceSupport } = await deviceSupportServer({
+    mobileOnly: true,
+  });
+  console.log("isDeviceSupport :>> ", isDeviceSupport);
+  if (!isDeviceSupport) {
+    return (
+      <ContainerLayout>
+        <UnSupportedDevice />
+      </ContainerLayout>
+    );
+  }
 
   const headersList = await headers();
   const subdomain = headersList.get("x-subdomain") || "";
 
   const payload = { restaurantOrderId };
-  const [menuData, buffetExpire] = await Promise.all([
+  const [menulist, buffetExpire] = await Promise.all([
     getMenuList({ payload }),
     getMenuAndBuffetExpire({ payload }),
   ]);
 
-  console.log("buffetExpire :>> ", buffetExpire);
-  console.log("menuData :>> ", menuData);
-
-  return null;
-  // <MenuClient
-  //   $subdomain={subdomain}
-  //   $restaurantOrderId={restaurantOrderId}
-  //   $menuData={menuData}
-  //   $buffetExpire={buffetExpire}
-  // />
+  return (
+    <ClientRestaurantMenu
+      $subdomain={subdomain}
+      $restaurantOrderId={restaurantOrderId}
+      $menulist={menulist}
+      $buffetExpire={buffetExpire}
+    />
+  );
 };
 
-export default MenuRestaurant;
+export default ServerSide;
