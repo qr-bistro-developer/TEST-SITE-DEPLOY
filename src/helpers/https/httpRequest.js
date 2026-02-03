@@ -1,5 +1,6 @@
 import { configHeader } from "@helpers/https/configHeader";
-import { createHttpError, isHttpError } from "@helpers/https/httpError";
+import { handleHttpError, isHttpError } from "@helpers/https/httpError";
+import _ from "lodash";
 
 const API_ENDPOINT = process.env.API_ENDPOINT;
 export const httpRequest = async ({
@@ -41,28 +42,18 @@ export const httpRequest = async ({
     }
 
     const response = await fetch(url, fetchOptions);
-
-    const contentType = response.headers.get("content-type");
-    if (!contentType?.includes("application/json")) {
-      throw createHttpError(response.status);
-    }
-
     const result = await response.json();
 
-    if (response.status >= 500) {
-      throw createHttpError(response.status);
-    }
-
-    if (response.status === 404) {
-      throw createHttpError(404);
+    if (!response.ok) {
+      const apiMessage = _.get(result, ["message"], null);
+      throw handleHttpError({ status: response.status, customMessage: apiMessage });
     }
 
     return result;
   } catch (error) {
-    if (isHttpError(error)) {
+    if (isHttpError({ error })) {
       throw error;
     }
-
-    throw createHttpError(0);
+    throw handleHttpError({ status: 0 });
   }
 };

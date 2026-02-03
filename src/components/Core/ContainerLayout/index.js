@@ -3,8 +3,10 @@ import styled from "styled-components";
 
 export const ContainerLayout = styled.div`
   flex: 1;
+  display: flex;
+  flex-direction: column;
   background: ${({ $backgroundColor = COLOR_BODY_BACKGROUND }) =>
     $backgroundColor};
-  display: flex;
-  justify-content: center;
+  min-height: 100vh;
+  overflow: ${({ $overflow = "auto" }) => $overflow};
 `;

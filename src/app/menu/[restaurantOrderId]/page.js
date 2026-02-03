@@ -3,10 +3,12 @@ import {
   getMenuAndBuffetExpire,
   getMenuList,
 } from "@/services/menu/[restaurantOrderId]";
-import { MenuClient } from "./MenuClient";
+import { validateUUID } from "@utils/validateUUID";
 
 const MenuRestaurant = async ({ params }) => {
   const { restaurantOrderId } = await params;
+  validateUUID({ value: restaurantOrderId });
+
   const headersList = await headers();
   const subdomain = headersList.get("x-subdomain") || "";
 
@@ -16,14 +18,16 @@ const MenuRestaurant = async ({ params }) => {
     getMenuAndBuffetExpire({ payload }),
   ]);
 
-  return (
-    <MenuClient
-      $subdomain={subdomain}
-      $restaurantOrderId={restaurantOrderId}
-      $menuData={menuData}
-      $buffetExpire={buffetExpire}
-    />
-  );
+  console.log("buffetExpire :>> ", buffetExpire);
+  console.log("menuData :>> ", menuData);
+
+  return null;
+  // <MenuClient
+  //   $subdomain={subdomain}
+  //   $restaurantOrderId={restaurantOrderId}
+  //   $menuData={menuData}
+  //   $buffetExpire={buffetExpire}
+  // />
 };
 
 export default MenuRestaurant;
