@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import _ from "lodash";
-import { FONT_FAMILIES } from "@statics/fonts";
+import { FONT_FAMILIES } from "@statics/FONT_FAMILIES";
 
 const ALL_FONTS = _.values(FONT_FAMILIES);
 

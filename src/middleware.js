@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import _ from "lodash";
-import { RESTRICTION_TYPES } from "@statics/restrictedRoutes";
+import { RESTRICTION_TYPES } from "@statics/RESTRICTED_ROUTES";
 import { getSubdomain } from "@middlewares/subdomain";
 import {
   getMatchedRoute,

@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { BREAKPOINTS } from "@statics/breakpoints";
+import { BREAKPOINTS } from "@statics/BREAKPOINTS";
 
 export const useSupportedDevice = ({
   maxWidth = BREAKPOINTS.TABLET_MAX,

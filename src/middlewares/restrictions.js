@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import _ from "lodash";
-import { RESTRICTED_ROUTES } from "@statics/restrictedRoutes";
+import { RESTRICTED_ROUTES } from "@statics/RESTRICTED_ROUTES";
 
 export const getMatchedRoute = ({ pathname = "" } = {}) => {
   return _.find(RESTRICTED_ROUTES, (route) =>
