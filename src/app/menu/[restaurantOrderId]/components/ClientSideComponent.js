@@ -14,7 +14,7 @@ import { BREAKPOINTS } from "@/statics/BREAKPOINTS";
 import { shallowEqual, useDispatch, useSelector } from "react-redux";
 import { setThemeColors } from "@store/redux/reducers/themeColors.reducers";
 import _ from "lodash";
-import React, { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import styled from "styled-components";
 import { Button } from "@/components/Core/Button";
 import { ContainerCashierNavigateBack } from "@/app/menu/[restaurantOrderId]/components/ContainerOrderHeader";
