@@ -15,6 +15,7 @@ export const ContainerCashierOrderHeader = styled.div`
 
 export const ContainerCashierOrderList = styled.div`
   flex: 1;
+  min-height: 0;
   display: flex;
   flex-direction: column;
   padding-top: ${MAIN_STYLE.CONTAINER_GAP}px;
@@ -22,6 +23,7 @@ export const ContainerCashierOrderList = styled.div`
   padding-right: ${MAIN_STYLE.CONTAINER_GAP}px;
   background-color: ${({ $backgroundColor = "transparent" }) =>
     $backgroundColor};
+  overflow-y: auto;
 `;
 
 export const ContainerFooter = styled.div`

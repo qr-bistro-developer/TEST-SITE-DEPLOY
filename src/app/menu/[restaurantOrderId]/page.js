@@ -15,17 +15,17 @@ const ServerSideComponent = async ({ params }) => {
   const { restaurantOrderId } = await params;
   validateUUID({ value: restaurantOrderId });
 
-  const { isDeviceSupport } = await deviceSupportServer({
-    mobileOnly: true,
-  });
+  // const { isDeviceSupport } = await deviceSupportServer({
+  //   mobileOnly: true,
+  // });
 
-  if (!isDeviceSupport) {
-    return (
-      <ContainerLayout>
-        <UnSupportedDevice />
-      </ContainerLayout>
-    );
-  }
+  // if (!isDeviceSupport) {
+  //   return (
+  //     <ContainerLayout>
+  //       <UnSupportedDevice />
+  //     </ContainerLayout>
+  //   );
+  // }
 
   const headersList = await headers();
   const subdomain = headersList.get("x-subdomain") || "";

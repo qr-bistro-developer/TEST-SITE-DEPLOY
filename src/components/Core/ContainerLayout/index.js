@@ -8,6 +8,7 @@ export const ContainerLayout = styled.div`
   align-items: center;
   background: ${({ $backgroundColor = COLOR_BODY_BACKGROUND }) =>
     $backgroundColor};
-  min-height: 100vh;
+  height: ${({ $height = "auto" }) => $height};
+  min-height: ${({ $minHeight = "100vh" }) => $minHeight};
   overflow: ${({ $overflow = "auto" }) => $overflow};
 `;

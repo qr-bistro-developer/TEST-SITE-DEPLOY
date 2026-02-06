@@ -66,7 +66,7 @@ export const ContainerCashierNavigateBack = ({
         <ContainerLogo>
           <Image
             src={$logoImagePath || IMAGE_DEFAULT_APP_LOGO}
-            alt="logo"
+            alt="QR Bistro Restaurant Logo"
             fill
             style={{ objectFit: "cover" }}
           />

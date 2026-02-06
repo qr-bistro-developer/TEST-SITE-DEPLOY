@@ -25,6 +25,7 @@ import { useRequesting } from "@/hooks/useRequesting";
 
 const Container = styled.div`
   flex: 1;
+  min-height: 0;
   display: flex;
   flex-direction: column;
   max-width: ${BREAKPOINTS.MOBILE_MAX}px;
@@ -109,9 +110,9 @@ export const ClientSideComponent = ({
     return [];
   }, [productWithCategoryKey, filterName, selectedCategory]);
 
-  const { isDeviceSupport } = useSupportedDevice({
-    maxWidth: BREAKPOINTS.MOBILE_MAX,
-  });
+  // const { isDeviceSupport } = useSupportedDevice({
+  //   maxWidth: BREAKPOINTS.MOBILE_MAX,
+  // });
 
   const handleFilter = ({ filterName }) => {
     setFilterName(filterName);
@@ -126,59 +127,75 @@ export const ClientSideComponent = ({
   };
 
   return (
-    <ContainerLayout>
-      {isDeviceSupport ? (
-        <Container>
-          <ContainerCashierOrderHeader
+    <ContainerLayout $overflow="hidden" $height="100vh" $minHeight="0">
+      {/* {isDeviceSupport ? ( */}
+      <Container>
+        <ContainerCashierOrderHeader
+          $backgroundColor={theme?.button?.background}
+        >
+          <ContainerCashierNavigateBack
+            $title={_.get($tableInformation, ["name"])}
+            $logoImagePath={_.get($restaurantInformation, ["logoImagePath"])}
+            $countdown={countdownFormatted}
+            $isExpired={isExpired}
+            $serviceType={serviceType}
+          />
+          <ContainerFilter>
+            <InputFilterWrapper>
+              <InputFilter
+                $placeholder="Enter name"
+                $handleFilter={handleFilter}
+                $setFilterName={setFilterName}
+              />
+            </InputFilterWrapper>
+            <Button type="button" onClick={() => handleNavigateToOrderList()}>
+              <ICON_ORDER_LIST $size={38} $fill={theme?.button?.text} />
+            </Button>
+          </ContainerFilter>
+        </ContainerCashierOrderHeader>
+        <ContainerCashierOrderList>
+          {_.map(new Array(300), (item, index) => {
+            return (
+              <div
+                key={index}
+                style={{
+                  flexShrink: 0,
+                  marginTop: 12,
+                  marginBottom: 12,
+                  width: 20,
+                  height: 20,
+                  background: "red",
+                }}
+              />
+            );
+          })}
+        </ContainerCashierOrderList>
+        <ContainerFooter>
+          <Button
+            style={{ flex: 1 }}
+            disabled={
+              disabled ||
+              _.chain(orderCart).get([$restaurantOrderId]).isEmpty().value()
+            }
+            onClick={() => handleNavigateToCart()}
+            $height={MAIN_STYLE?.BUTTON_DEFAULT_HEIGHT}
+            $borderRadius={MAIN_STYLE?.BUTTON_DEFAULT_RADIUS}
             $backgroundColor={theme?.button?.background}
           >
-            <ContainerCashierNavigateBack
-              $title={_.get($tableInformation, ["name"])}
-              $logoImagePath={_.get($restaurantInformation, ["logoImagePath"])}
-              $countdown={countdownFormatted}
-              $isExpired={isExpired}
-              $serviceType={serviceType}
-            />
-            <ContainerFilter>
-              <InputFilterWrapper>
-                <InputFilter
-                  $placeholder="Enter name"
-                  $handleFilter={handleFilter}
-                  $setFilterName={setFilterName}
-                />
-              </InputFilterWrapper>
-              <Button type="button" onClick={() => handleNavigateToOrderList()}>
-                <ICON_ORDER_LIST $size={38} $fill={theme?.button?.text} />
-              </Button>
-            </ContainerFilter>
-          </ContainerCashierOrderHeader>
-          <ContainerCashierOrderList />
-          <ContainerFooter>
-            <Button
-              style={{ flex: 1 }}
-              disabled={
-                disabled ||
-                _.chain(orderCart).get([$restaurantOrderId]).isEmpty().value()
-              }
-              onPress={() => handleNavigateToCart()}
-              $height={MAIN_STYLE?.BUTTON_DEFAULT_HEIGHT}
-              $borderRadius={MAIN_STYLE?.BUTTON_DEFAULT_RADIUS}
-              $backgroundColor={theme?.button?.background}
+            <Text
+              $fontWeight={600}
+              $fontSize={16}
+              $color={theme?.button?.text}
+              $textTransform={"uppercase"}
             >
-              <Text
-                $fontWeight={600}
-                $fontSize={16}
-                $color={theme?.button?.text}
-                $textTransform={"uppercase"}
-              >
-                Cart
-              </Text>
-            </Button>
-          </ContainerFooter>
-        </Container>
-      ) : (
-        <UnSupportedDevice />
-      )}
+              Cart
+            </Text>
+          </Button>
+        </ContainerFooter>
+      </Container>
+      {/* ) : (
+         <UnSupportedDevice />
+       )} */}
     </ContainerLayout>
   );
 };
