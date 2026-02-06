@@ -2,6 +2,7 @@ import { configureStore, combineReducers } from "@reduxjs/toolkit";
 import {
   persistStore,
   persistReducer,
+  createTransform,
   FLUSH,
   REHYDRATE,
   PAUSE,
@@ -12,7 +13,7 @@ import {
 import createWebStorage from "redux-persist/lib/storage/createWebStorage";
 import guide from "@/store/redux/reducers/guide.reducers";
 
-const createNoopStorage = () => ({
+const createServerSafeStorage = () => ({
   getItem: () => Promise.resolve(null),
   setItem: () => Promise.resolve(),
   removeItem: () => Promise.resolve(),
@@ -21,7 +22,24 @@ const createNoopStorage = () => ({
 const storage =
   typeof window !== "undefined"
     ? createWebStorage("local")
-    : createNoopStorage();
+    : createServerSafeStorage();
+
+const encodeTransform = createTransform(
+  (inboundState) => {
+    try {
+      return btoa(encodeURIComponent(JSON.stringify(inboundState)));
+    } catch {
+      return inboundState;
+    }
+  },
+  (outboundState) => {
+    try {
+      return JSON.parse(decodeURIComponent(atob(outboundState)));
+    } catch {
+      return outboundState;
+    }
+  }
+);
 
 const rootReducer = combineReducers({
   guide,
@@ -32,6 +50,7 @@ const persistConfig = {
   version: 1,
   storage,
   whitelist: ["guide"],
+  transforms: [encodeTransform],
 };
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);
