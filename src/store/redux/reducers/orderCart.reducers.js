@@ -1,19 +1,19 @@
-import { createSlice } from "@reduxjs/toolkit";
-import _ from "lodash";
+import { createSlice } from '@reduxjs/toolkit';
+import _ from 'lodash';
 
 const initialState = {
-  data: null,
+  data: {},
 };
 export const slice = createSlice({
-  name: "guide",
+  name: 'orderCart',
   initialState: _.cloneDeep(initialState),
   reducers: {
-    setGuide: (state, action) => {
+    setOrderCart: (state, action) => {
       state.data = action.payload;
     },
   },
 });
 
-export const { setGuide } = slice.actions;
+export const { setOrderCart } = slice.actions;
 
 export default slice.reducer;

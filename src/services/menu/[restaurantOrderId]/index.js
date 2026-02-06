@@ -31,3 +31,16 @@ export const getMenuAndBuffetExpire = async ({ payload }) => {
     throw error;
   }
 };
+
+export const getTableInformation = async ({ payload }) => {
+  try {
+    const response = await httpRequest({
+      path: `${REQUEST_MAIN_PATH}/get-information-by-customer`,
+      data: payload,
+    });
+    const result = _.get(response, ["result"], null);
+    return result;
+  } catch (error) {
+    throw error;
+  }
+};

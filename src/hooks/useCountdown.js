@@ -4,7 +4,6 @@ import dayjs from "dayjs";
 
 export const useCountdown = (expiresIn) => {
   const [countdown, setCountdown] = useState(0);
-  const [filterName, setFilterName] = useState(null);
 
   useEffect(() => {
     if (!_.isNil(expiresIn)) {

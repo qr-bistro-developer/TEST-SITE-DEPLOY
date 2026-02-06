@@ -31,6 +31,7 @@ const eslintConfig = defineConfig([
         alias: {
           map: [
             ["@", "./src"],
+            ["@app", "./src/app"],
             ["@actions", "./src/actions"],
             ["@components", "./src/components"],
             ["@lib", "./src/lib"],

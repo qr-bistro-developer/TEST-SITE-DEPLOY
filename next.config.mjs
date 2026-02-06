@@ -9,6 +9,14 @@ const nextConfig = {
   compiler: {
     styledComponents: true,
   },
+  images: {
+    remotePatterns: [
+      {
+        protocol: "https",
+        hostname: "d191sdiqrxs6vs.cloudfront.net",
+      },
+    ],
+  },
   webpack: (config, { isServer }) => {
     // Alias getAccessToken ไปยังไฟล์ที่ถูกต้องตาม environment
     config.resolve.alias["@store/cookies/getAccessToken"] = path.resolve(

@@ -11,7 +11,8 @@ import {
   REGISTER,
 } from "redux-persist";
 import createWebStorage from "redux-persist/lib/storage/createWebStorage";
-import guide from "@/store/redux/reducers/guide.reducers";
+import themeColors from "@/store/redux/reducers/themeColors.reducers";
+import orderCart from "@/store/redux/reducers/orderCart.reducers";
 
 const createServerSafeStorage = () => ({
   getItem: () => Promise.resolve(null),
@@ -38,18 +39,19 @@ const encodeTransform = createTransform(
     } catch {
       return outboundState;
     }
-  }
+  },
 );
 
 const rootReducer = combineReducers({
-  guide,
+  orderCart,
+  themeColors,
 });
 
 const persistConfig = {
   key: "QR_BISTRO",
   version: 1,
   storage,
-  whitelist: ["guide"],
+  whitelist: ["guide", "themeColors"],
   transforms: [encodeTransform],
 };
 
