@@ -2,7 +2,7 @@
 import { ContainerLayout } from "@/components/Core/ContainerLayout";
 import { UnSupportedDevice } from "@/components/Core/UnSupportedDevice";
 import { useSupportedDevice } from "@/hooks/useSupportedDevice";
-import { BREAKPOINTS } from "@/statics/breakpoints";
+import { BREAKPOINTS } from "@/statics/BREAKPOINTS";
 import { MAIN_STYLE } from "@/statics/MAIN_STYLE";
 import _ from "lodash";
 import React from "react";
@@ -15,13 +15,6 @@ const Container = styled.div`
   background: red;
   max-width: ${BREAKPOINTS.MOBILE_MAX}px;
   width: 100%;
-`;
-
-const ContainerFilter = styled.View`
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  gap: ${MAIN_STYLE.CONTAINER_GAP}px;
 `;
 
 export const ClientRestaurantMenu = ({

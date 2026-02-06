@@ -26,8 +26,8 @@
  */
 
 import styled, { css } from "styled-components";
-import { COLOR_DARK } from "@/statics/colors";
-import { FONT_FAMILIES } from "@/statics/fonts";
+import { COLOR_DARK } from "@/statics/COLORS";
+import { FONT_FAMILIES } from "@/statics/FONT_FAMILIES";
 import { resolveSize } from "@/utils/resolve/resolveSize";
 
 export const Text = styled.span`

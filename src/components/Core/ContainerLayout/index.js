@@ -1,4 +1,4 @@
-import { COLOR_BODY_BACKGROUND } from "@/statics/colors";
+import { COLOR_BODY_BACKGROUND } from "@/statics/COLORS";
 import styled from "styled-components";
 
 export const ContainerLayout = styled.div`

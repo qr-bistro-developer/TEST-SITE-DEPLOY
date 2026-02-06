@@ -1,4 +1,4 @@
-import { FONT_FAMILIES } from "@/statics/fonts";
+import { FONT_FAMILIES } from "@/statics/FONT_FAMILIES";
 import styled from "styled-components";
 
 const Container = styled.div`
