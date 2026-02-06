@@ -149,7 +149,11 @@ export const ClientSideComponent = ({
                 $setFilterName={setFilterName}
               />
             </InputFilterWrapper>
-            <Button type="button" onClick={() => handleNavigateToOrderList()}>
+            <Button
+              type="button"
+              aria-label="View order list"
+              onClick={() => handleNavigateToOrderList()}
+            >
               <ICON_ORDER_LIST $size={38} $fill={theme?.button?.text} />
             </Button>
           </ContainerFilter>

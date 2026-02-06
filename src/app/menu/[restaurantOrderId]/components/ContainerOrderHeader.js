@@ -77,12 +77,18 @@ export const ContainerCashierNavigateBack = ({
           />
         </ContainerLogo>
         <ContainerContent>
-          <Text $fontSize={16} $fontWeight={500} $color={theme?.button?.text}>
+          <Text
+            as="h1"
+            $fontSize={16}
+            $fontWeight={500}
+            $color={theme?.button?.text}
+          >
             {$title}
           </Text>
           {$description && (
             <ContainerDescription>
               <Text
+                as="p"
                 $fontSize={13}
                 $fontWeight={500}
                 $color={resolveHexWithOpacity({
@@ -97,6 +103,7 @@ export const ContainerCashierNavigateBack = ({
           {$serviceType && (
             <ContainerDescription>
               <Text
+                as="p"
                 $fontSize={13}
                 $fontWeight={500}
                 $color={resolveHexWithOpacity({
@@ -108,6 +115,7 @@ export const ContainerCashierNavigateBack = ({
               </Text>
               {$serviceType === "BUFFET" && $countdown && (
                 <Text
+                  as="time"
                   $fontSize={13}
                   $fontWeight={500}
                   $color={resolveHexWithOpacity({
