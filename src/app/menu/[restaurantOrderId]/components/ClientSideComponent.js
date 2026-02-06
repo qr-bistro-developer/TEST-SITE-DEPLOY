@@ -136,6 +136,7 @@ export const ClientSideComponent = ({
           <ContainerCashierNavigateBack
             $title={_.get($tableInformation, ["name"])}
             $logoImagePath={_.get($restaurantInformation, ["logoImagePath"])}
+            $restaurantName={_.get($restaurantInformation, ["name"])}
             $countdown={countdownFormatted}
             $isExpired={isExpired}
             $serviceType={serviceType}

@@ -55,6 +55,7 @@ export const ContainerCashierNavigateBack = ({
   $isExpired = false,
   $description = null,
   $logoImagePath = null,
+  $restaurantName = null,
   children,
 }) => {
   const navigateDescription = `Service type: ${_.capitalize($serviceType)}`;
@@ -66,7 +67,11 @@ export const ContainerCashierNavigateBack = ({
         <ContainerLogo>
           <Image
             src={$logoImagePath || IMAGE_DEFAULT_APP_LOGO}
-            alt="QR Bistro Restaurant Logo"
+            alt={
+              $logoImagePath
+                ? `${$restaurantName} - QR Bistro Restaurant`
+                : "QR Bistro Restaurant Logo"
+            }
             fill
             style={{ objectFit: "cover" }}
           />
