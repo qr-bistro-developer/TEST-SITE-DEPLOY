@@ -9,7 +9,9 @@
       "Bash(yarn remove:*)",
       "Bash(git mv:*)",
       "Bash(ls:*)",
-      "Bash(wc:*)"
+      "Bash(wc:*)",
+      "Bash(lsof -ti:3000)",
+      "Bash(xargs kill:*)"
     ]
   }
 }
