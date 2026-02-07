@@ -73,7 +73,9 @@ export const ContainerCashierNavigateBack = ({
                 : "QR Bistro Restaurant Logo"
             }
             fill
+            sizes="48px"
             style={{ objectFit: "cover" }}
+            priority
           />
         </ContainerLogo>
         <ContainerContent>

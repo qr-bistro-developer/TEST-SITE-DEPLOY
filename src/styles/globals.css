@@ -45,7 +45,7 @@ body {
   overflow-x: hidden;
   color: var(--foreground);
   background: var(--background);
-  font-family: var(--font-niramit), Arial, Helvetica, sans-serif;
+  font-family: var(--font-ibmPlexSansThai), Arial, Helvetica, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
