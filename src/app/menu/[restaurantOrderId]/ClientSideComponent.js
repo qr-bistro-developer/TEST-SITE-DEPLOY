@@ -144,121 +144,123 @@ export const ClientSideComponent = ({
 
   return (
     <ContainerLayout $overflow="hidden" $height="100vh" $minHeight="0">
-      {/* {isDeviceSupport ? ( */}
-      <Container>
-        <ContainerCashierOrderHeader
-          $backgroundColor={theme?.button?.background}
-        >
-          <ContainerCashierNavigateBack
-            $title={_.get($tableInformation, ["name"])}
-            $logoImagePath={_.get($restaurantInformation, ["logoImagePath"])}
-            $restaurantName={_.get($restaurantInformation, ["name"])}
-            $countdown={countdownFormatted}
-            $isExpired={isExpired}
-            $serviceType={serviceType}
-          />
-          <ContainerFilter>
-            <InputFilterWrapper>
-              <InputFilter
-                $placeholder="Enter name"
-                $handleFilter={handleFilter}
-                $setFilterName={setFilterName}
-              />
-            </InputFilterWrapper>
-            <Button
-              type="button"
-              aria-label="View order list"
-              onClick={() => handleNavigateToOrderList()}
-            >
-              <ICON_ORDER_LIST $size={38} $fill={theme?.button?.text} />
-            </Button>
-          </ContainerFilter>
-        </ContainerCashierOrderHeader>
-        <ContainerCategories>
-          {_.map(categories, (item) => {
-            const categoryId = _.get(item, ["id"]);
-            const categoryName = _.get(item, ["value"]);
-            const isSelected = categoryId === selectedCategory;
-            const isFilterActive = filterName && filterName.trim() !== "";
-            return (
-              <Button
-                key={categoryId}
-                disabled={isFilterActive}
-                onClick={() => setSelectedCategory(categoryId)}
-                $height={MAIN_STYLE.BUTTON_DEFAULT_HEIGHT - 12}
-                $pr={16}
-                $pl={16}
-                $backgroundColor={
-                  isSelected ? theme?.button?.background : theme?.button?.text
-                }
-                $borderWidth={1}
-                $borderRadius={8}
-                $borderColor={theme?.button?.background}
-              >
-                <Text
-                  $ellipsis={false}
-                  $whiteSpace="nowrap"
-                  $fontSize={14}
-                  $fontWeight={600}
-                  $textTransform="capitalize"
-                  $align="center"
-                  $color={
-                    isSelected ? theme?.button?.text : theme?.button?.background
-                  }
-                >
-                  {categoryName}
-                </Text>
-              </Button>
-            );
-          })}
-        </ContainerCategories>
-        <ContainerCashierOrderList>
-          {_.map(displayProductList, (item, index) => {
-            const productId = _.get(item, ["id"], index);
-            return (
-              <ContainerProductItem
-                key={productId}
-                $item={item}
-                $disabled={disabled}
-                $handleCardPress={() => {
-                  alert("Card click :>> ");
-                  console.log("Card click :>> ");
-                  // TODO: handle card press
-                }}
-                $handleButtonPress={() => {
-                  alert("Button click :>> ");
-                  // TODO: handle button press (add to cart)
-                }}
-              />
-            );
-          })}
-        </ContainerCashierOrderList>
-        <ContainerFooter>
-          <Button
-            style={{ flex: 1 }}
-            disabled={
-              disabled ||
-              _.chain(orderCart).get([$restaurantOrderId]).isEmpty().value()
-            }
-            onClick={() => handleNavigateToCart()}
-            $height={MAIN_STYLE?.BUTTON_DEFAULT_HEIGHT}
-            $borderRadius={MAIN_STYLE?.BUTTON_DEFAULT_RADIUS}
+      {isDeviceSupport ? (
+        <Container>
+          <ContainerCashierOrderHeader
             $backgroundColor={theme?.button?.background}
           >
-            <Text
-              $fontWeight={600}
-              $fontSize={16}
-              $color={theme?.button?.text}
-              $textTransform={"uppercase"}
+            <ContainerCashierNavigateBack
+              $title={_.get($tableInformation, ["name"])}
+              $logoImagePath={_.get($restaurantInformation, ["logoImagePath"])}
+              $restaurantName={_.get($restaurantInformation, ["name"])}
+              $countdown={countdownFormatted}
+              $isExpired={isExpired}
+              $serviceType={serviceType}
+            />
+            <ContainerFilter>
+              <InputFilterWrapper>
+                <InputFilter
+                  $placeholder="Enter name"
+                  $handleFilter={handleFilter}
+                  $setFilterName={setFilterName}
+                />
+              </InputFilterWrapper>
+              <Button
+                type="button"
+                aria-label="View order list"
+                onClick={() => handleNavigateToOrderList()}
+              >
+                <ICON_ORDER_LIST $size={38} $fill={theme?.button?.text} />
+              </Button>
+            </ContainerFilter>
+          </ContainerCashierOrderHeader>
+          <ContainerCategories>
+            {_.map(categories, (item) => {
+              const categoryId = _.get(item, ["id"]);
+              const categoryName = _.get(item, ["value"]);
+              const isSelected = categoryId === selectedCategory;
+              const isFilterActive = filterName && filterName.trim() !== "";
+              return (
+                <Button
+                  key={categoryId}
+                  disabled={isFilterActive}
+                  onClick={() => setSelectedCategory(categoryId)}
+                  $height={MAIN_STYLE.BUTTON_DEFAULT_HEIGHT - 12}
+                  $pr={16}
+                  $pl={16}
+                  $backgroundColor={
+                    isSelected ? theme?.button?.background : theme?.button?.text
+                  }
+                  $borderWidth={1}
+                  $borderRadius={8}
+                  $borderColor={theme?.button?.background}
+                >
+                  <Text
+                    $ellipsis={false}
+                    $whiteSpace="nowrap"
+                    $fontSize={14}
+                    $fontWeight={600}
+                    $textTransform="capitalize"
+                    $align="center"
+                    $color={
+                      isSelected
+                        ? theme?.button?.text
+                        : theme?.button?.background
+                    }
+                  >
+                    {categoryName}
+                  </Text>
+                </Button>
+              );
+            })}
+          </ContainerCategories>
+          <ContainerCashierOrderList>
+            {_.map(displayProductList, (item, index) => {
+              const productId = _.get(item, ["id"], index);
+              return (
+                <ContainerProductItem
+                  key={productId}
+                  $item={item}
+                  $disabled={disabled}
+                  $handleCardPress={() => {
+                    alert("Card click :>> ");
+                    console.log("Card click :>> ");
+                    // TODO: handle card press
+                  }}
+                  $handleButtonPress={() => {
+                    alert("Button click :>> ");
+                    // TODO: handle button press (add to cart)
+                  }}
+                />
+              );
+            })}
+          </ContainerCashierOrderList>
+          <ContainerFooter>
+            <Button
+              style={{ flex: 1 }}
+              disabled={
+                disabled ||
+                _.chain(orderCart).get([$restaurantOrderId]).isEmpty().value()
+              }
+              onClick={() => handleNavigateToCart()}
+              $height={MAIN_STYLE?.BUTTON_DEFAULT_HEIGHT}
+              $borderRadius={MAIN_STYLE?.BUTTON_DEFAULT_RADIUS}
+              $backgroundColor={theme?.button?.background}
             >
-              Cart
-            </Text>
-          </Button>
-        </ContainerFooter>
-      </Container>
-      {/* ) : (
-         <UnSupportedDevice />
-       )} */}
+              <Text
+                $fontWeight={600}
+                $fontSize={16}
+                $color={theme?.button?.text}
+                $textTransform={"uppercase"}
+              >
+                Cart
+              </Text>
+            </Button>
+          </ContainerFooter>
+        </Container>
+      ) : (
+        <UnSupportedDevice />
+      )}
     </ContainerLayout>
   );
 };
