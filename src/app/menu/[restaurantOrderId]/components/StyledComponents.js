@@ -17,13 +17,14 @@ export const ContainerCashierOrderList = styled.div`
   flex: 1;
   min-height: 0;
   display: flex;
-  flex-direction: column;
-  padding-top: ${MAIN_STYLE.CONTAINER_GAP}px;
-  padding-left: ${MAIN_STYLE.CONTAINER_GAP}px;
-  padding-right: ${MAIN_STYLE.CONTAINER_GAP}px;
+  flex-direction: row;
+  flex-wrap: wrap;
+  gap: ${MAIN_STYLE.CONTAINER_GAP}px;
+  padding: ${MAIN_STYLE.CONTAINER_GAP}px;
   background-color: ${({ $backgroundColor = "transparent" }) =>
     $backgroundColor};
   overflow-y: auto;
+  align-content: flex-start;
 `;
 
 export const ContainerFooter = styled.div`

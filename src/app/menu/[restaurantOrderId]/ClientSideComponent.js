@@ -61,15 +61,6 @@ export const ClientSideComponent = ({
     (state) => state?.orderCart?.data,
     shallowEqual,
   );
-  const { isRequesting, startRequest, endRequest } = useRequesting();
-  const resultExpireIn = _.get($buffetExpire, ["expireIn"], null);
-  const serviceType = _.get($tableInformation, ["serviceType"], "A LA CARTE");
-  const { countdownFormatted, isExpired } = useCountdown(resultExpireIn);
-  const restaurantTheme = _.get($restaurantInformation, ["theme"], null);
-  const disabled =
-    serviceType === "A LA CARTE" ? false : isRequesting || isExpired;
-  const [selectedCategory, setSelectedCategory] = useState(null);
-
   const categories = _.chain($menulist)
     .map((item) => {
       return {
@@ -87,6 +78,16 @@ export const ClientSideComponent = ({
       return _.get(item, ["restaurantProducts"], []);
     })
     .value();
+  const { isRequesting, startRequest, endRequest } = useRequesting();
+  const resultExpireIn = _.get($buffetExpire, ["expireIn"], null);
+  const serviceType = _.get($tableInformation, ["serviceType"], "A LA CARTE");
+  const { countdownFormatted, isExpired } = useCountdown(resultExpireIn);
+  const restaurantTheme = _.get($restaurantInformation, ["theme"], null);
+  const disabled =
+    serviceType === "A LA CARTE" ? false : isRequesting || isExpired;
+  const [selectedCategory, setSelectedCategory] = useState(
+    _.get(categories, [0, "id"], null),
+  );
 
   useEffect(() => {
     if (restaurantTheme) {
@@ -97,12 +98,14 @@ export const ClientSideComponent = ({
   const [filterName, setFilterName] = useState("");
 
   const displayProductList = useMemo(() => {
+    let products = [];
+
     if (!productWithCategoryKey) {
       return [];
     }
 
     if (filterName && filterName.trim() !== "") {
-      return _.chain(productWithCategoryKey)
+      products = _.chain(productWithCategoryKey)
         .values()
         .flatten()
         .filter((product) => {
@@ -112,13 +115,15 @@ export const ClientSideComponent = ({
         })
         .uniqBy("id")
         .value();
+    } else if (selectedCategory) {
+      products = _.get(productWithCategoryKey, [selectedCategory], []);
     }
 
-    if (selectedCategory) {
-      return _.get(productWithCategoryKey, [selectedCategory], []);
+    if (products.length % 2 !== 0) {
+      products = [...products, { isPlaceholder: true }];
     }
 
-    return [];
+    return products;
   }, [productWithCategoryKey, filterName, selectedCategory]);
 
   const { isDeviceSupport } = useSupportedDevice({
@@ -208,8 +213,24 @@ export const ClientSideComponent = ({
           })}
         </ContainerCategories>
         <ContainerCashierOrderList>
-          {_.map(new Array(300), (item, index) => {
-            return <ContainerProductItem key={index} />;
+          {_.map(displayProductList, (item, index) => {
+            const productId = _.get(item, ["id"], index);
+            return (
+              <ContainerProductItem
+                key={productId}
+                $item={item}
+                $disabled={disabled}
+                $handleCardPress={() => {
+                  console.log("Card click :>> ");
+                  // TODO: handle card press
+                }}
+                $handleButtonPress={() => {
+                  console.log("Button click :>> ");
+
+                  // TODO: handle button press (add to cart)
+                }}
+              />
+            );
           })}
         </ContainerCashierOrderList>
         <ContainerFooter>

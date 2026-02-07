@@ -8,20 +8,19 @@ import IMAGE_DEFAULT_RESTAURANT_MENU from "@assets/images/IMAGE_DEFAULT_RESTAURA
 import { ICON_IMPORT_DATA } from "@assets/svgs/IMPORT/ICON_IMPORT_DATA";
 import _ from "lodash";
 import { resolveSize } from "@/utils/resolve/resolveSize";
-// import { ContainerManageCardSideDescription } from '@components/ContainerManageCardSideDescription';
-// import { resolveCurrency } from '@utils/resolve/resolveCurrency';
+import Image from "next/image";
 
 const Container = styled.div`
-  flex: 1;
+  width: calc((100% - ${MAIN_STYLE.CONTAINER_GAP}px) / 2);
   display: flex;
   flex-direction: column;
   background: white;
   overflow: hidden;
   border-radius: ${resolveSize({ value: MAIN_STYLE.CONTAINER_DEFAULT_RADIUS })};
-  padding-bottom: ${resolveSize({ value: MAIN_STYLE.CONTAINER_GAP })};
 `;
 
-const ImageProduct = styled.div`
+const ImageWrapper = styled.div`
+  position: relative;
   width: 100%;
   height: ${resolveSize({ value: 140 })};
   background-color: ${({ $backgroundColor = "#f0f0f0" }) => $backgroundColor};
@@ -37,13 +36,13 @@ const ContainerInfo = styled.div`
 `;
 
 const ContainerPrice = styled.div`
-  flex: 1;
   display: flex;
   flex-direction: row;
   align-items: center;
   gap: ${resolveSize({ value: 8 })};
-  padding-left: ${resolveSize({ px: 8 })};
-  padding-right: ${resolveSize({ px: 8 })};
+  padding-left: ${resolveSize({ value: 8 })};
+  padding-right: ${resolveSize({ value: 8 })};
+  padding-bottom: ${resolveSize({ value: 8 })};
 `;
 
 export const ContainerProductItem = ({
@@ -56,68 +55,66 @@ export const ContainerProductItem = ({
   const theme = useSelector((state) => state?.themeColors?.data, shallowEqual);
 
   if (isPlaceholder) {
-    return <Container style={{ opacity: 0 }} />;
+    return <Container style={{ visibility: "hidden" }} />;
   }
 
-  const resolveImagePath = ({ imagePath = null }) => {
-    return imagePath ? { uri: imagePath } : IMAGE_DEFAULT_RESTAURANT_MENU;
-  };
+  const imagePath = _.get($item, ["imagePath"], null);
 
   return (
-    <Button
-      disabled={$disabled}
-      style={{ flex: 1 }}
-      activeOpacity={0.8}
-      onClick={$handleCardPress}
+    <Container
+      onClick={$disabled ? undefined : $handleCardPress}
+      style={{ cursor: $disabled ? "default" : "pointer" }}
     >
-      <Container>
-        <ImageProduct
-          source={resolveImagePath({ imagePath: $item?.imagePath })}
-          resizeMode="cover"
-          $backgroundColor={resolveHexWithOpacity({
-            color: theme?.text?.primary,
-            opacity: 10,
-          })}
+      <ImageWrapper
+        $backgroundColor={resolveHexWithOpacity({
+          color: theme?.text?.primary,
+          opacity: 10,
+        })}
+      >
+        <Image
+          src={imagePath || IMAGE_DEFAULT_RESTAURANT_MENU}
+          alt={_.get($item, ["name"], "product")}
+          fill
+          sizes="50vw"
+          style={{ objectFit: "cover" }}
         />
-        <ContainerInfo>
-          <Text
-            $color={theme?.text?.primary}
-            $ellipsis
-            $maxLines={1}
-            $fontSize={16}
-            $fontWeight={400}
-          >
-            {_.get($item, ["name"], "-")}
-          </Text>
-        </ContainerInfo>
-        <ContainerPrice>
-          {/* <View style={{ flex: 1 }}>
-            <ContainerManageCardSideDescription
-              $isActive
-              $label="Price"
-              $value={
-                _.get($item, ["price"]) > 0
-                  ? resolveCurrency({ value: _.get($item, ["price"]) })
-                  : "-"
-              }
-            />
-          </View>
-          <Button
-            disabled={$disabled}
-            onPress={$handleButtonPress}
-            $borderRadius={MAIN_STYLE?.BUTTON_DEFAULT_RADIUS}
-            $borderWidth={0}
-          >
-            <SvgXml
-              xml={ICON_IMPORT_DATA}
-              fill={theme?.button?.background}
-              width={fitPx({ px: 38 })}
-              height={fitPx({ px: 38 })}
-              opacity={1}
-            />
-          </Button> */}
-        </ContainerPrice>
-      </Container>
-    </Button>
+      </ImageWrapper>
+      <ContainerInfo>
+        <Text
+          $color={theme?.text?.primary}
+          $ellipsis
+          $maxLines={1}
+          $fontSize={16}
+          $fontWeight={400}
+        >
+          {_.get($item, ["name"], "-")}
+        </Text>
+      </ContainerInfo>
+      <ContainerPrice>
+        <Text
+          style={{ flex: 1 }}
+          $color={theme?.text?.secondary}
+          $fontSize={14}
+          $fontWeight={400}
+        >
+          {_.get($item, ["price"], 0) > 0
+            ? `฿${_.get($item, ["price"], 0)}`
+            : "-"}
+        </Text>
+        <Button
+          type="button"
+          aria-label="Add to cart"
+          disabled={$disabled}
+          onClick={(e) => {
+            e.stopPropagation();
+            $handleButtonPress();
+          }}
+          $borderRadius={MAIN_STYLE?.BUTTON_DEFAULT_RADIUS}
+          $borderWidth={0}
+        >
+          <ICON_IMPORT_DATA $size={38} $fill={theme?.button?.background} />
+        </Button>
+      </ContainerPrice>
+    </Container>
   );
 };
