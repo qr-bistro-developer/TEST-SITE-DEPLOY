@@ -9,7 +9,7 @@ import {
   handleSubdomainAndAuthRestriction,
 } from "@middlewares/restrictions";
 
-export function middleware(request) {
+export function proxy(request) {
   const { pathname } = request.nextUrl;
   const hostname = request.headers.get("host") || "";
   const subdomain = getSubdomain({ hostname });
