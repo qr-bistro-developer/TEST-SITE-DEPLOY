@@ -1,4 +1,4 @@
-import { Text } from "@/components/Core/Text";
+import { Text } from "@components/Core/Text";
 import React from "react";
 import styled from "styled-components";
 

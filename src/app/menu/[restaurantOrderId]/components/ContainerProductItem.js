@@ -7,7 +7,7 @@ import { useSelector, shallowEqual } from "react-redux";
 import IMAGE_DEFAULT_RESTAURANT_MENU from "@assets/images/IMAGE_DEFAULT_RESTAURANT_MENU.png";
 import { ICON_IMPORT_DATA } from "@assets/svgs/IMPORT/ICON_IMPORT_DATA";
 import _ from "lodash";
-import { resolveSize } from "@/utils/resolve/resolveSize";
+import { resolveSize } from "@utils/resolve/resolveSize";
 import Image from "next/image";
 
 const Container = styled.div`

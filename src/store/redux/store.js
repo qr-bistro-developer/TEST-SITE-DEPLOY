@@ -11,8 +11,8 @@ import {
   REGISTER,
 } from "redux-persist";
 import createWebStorage from "redux-persist/lib/storage/createWebStorage";
-import themeColors from "@/store/redux/reducers/themeColors.reducers";
-import orderCart from "@/store/redux/reducers/orderCart.reducers";
+import themeColors from "@store/redux/reducers/themeColors.reducers";
+import orderCart from "@store/redux/reducers/orderCart.reducers";
 
 const createServerSafeStorage = () => ({
   getItem: () => Promise.resolve(null),

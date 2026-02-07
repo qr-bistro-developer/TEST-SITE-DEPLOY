@@ -29,9 +29,9 @@
  */
 
 import styled, { css } from "styled-components";
-import { COLOR_DARK } from "@/statics/COLORS";
-import { FONT_FAMILIES } from "@/statics/FONT_FAMILIES";
-import { resolveSize } from "@/utils/resolve/resolveSize";
+import { COLOR_DARK } from "@statics/COLORS";
+import { FONT_FAMILIES } from "@statics/FONT_FAMILIES";
+import { resolveSize } from "@utils/resolve/resolveSize";
 
 export const Text = styled.span`
   color: ${({ $color = COLOR_DARK }) => $color};

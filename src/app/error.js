@@ -1,7 +1,7 @@
 "use client";
 
-import { ContainerLayout } from "@/components/Core/ContainerLayout";
-import { Text } from "@/components/Core/Text";
+import { ContainerLayout } from "@components/Core/ContainerLayout";
+import { Text } from "@components/Core/Text";
 import _ from "lodash";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
@@ -41,8 +41,11 @@ const parseErrorDigest = (digest) => {
 const ClientSide = ({ error }) => {
   const router = useRouter();
   const digestData = parseErrorDigest(_.get(error, ["digest"]));
-  const errorStatus = _.get(digestData, ["status"]) || _.get(error, ["status"], null);
-  const errorMessage = _.get(digestData, ["message"]) || _.get(error, ["message"], "Something went wrong");
+  const errorStatus =
+    _.get(digestData, ["status"]) || _.get(error, ["status"], null);
+  const errorMessage =
+    _.get(digestData, ["message"]) ||
+    _.get(error, ["message"], "Something went wrong");
 
   useEffect(() => {
     if (errorStatus === 401) {

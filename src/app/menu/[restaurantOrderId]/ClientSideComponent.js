@@ -5,24 +5,24 @@ import {
   ContainerFilter,
   ContainerFooter,
 } from "@app/menu/[restaurantOrderId]/components/StyledComponents";
-import { ContainerLayout } from "@/components/Core/ContainerLayout";
-import { UnSupportedDevice } from "@/components/Core/UnSupportedDevice";
+import { ContainerLayout } from "@components/Core/ContainerLayout";
+import { UnSupportedDevice } from "@components/Core/UnSupportedDevice";
 import { InputFilter } from "@components/Core/InputFilter";
 import { ICON_ORDER_LIST } from "@assets/svgs/INPUT_FILTER/ICON_ORDER_LIST";
-import { useSupportedDevice } from "@/hooks/useSupportedDevice";
-import { BREAKPOINTS } from "@/statics/BREAKPOINTS";
+import { useSupportedDevice } from "@hooks/useSupportedDevice";
+import { BREAKPOINTS } from "@statics/BREAKPOINTS";
 import { shallowEqual, useDispatch, useSelector } from "react-redux";
 import { setThemeColors } from "@store/redux/reducers/themeColors.reducers";
 import _ from "lodash";
 import { useEffect, useMemo, useState } from "react";
 import styled from "styled-components";
-import { Button } from "@/components/Core/Button";
-import { ContainerCashierNavigateBack } from "@/app/menu/[restaurantOrderId]/components/ContainerOrderHeader";
-import { useCountdown } from "@/hooks/useCountdown";
-import { Text } from "@/components/Core/Text";
-import { MAIN_STYLE } from "@/statics/MAIN_STYLE";
-import { useRequesting } from "@/hooks/useRequesting";
-import { ContainerProductItem } from "@/app/menu/[restaurantOrderId]/components/ContainerProductItem";
+import { Button } from "@components/Core/Button";
+import { ContainerCashierNavigateBack } from "@app/menu/[restaurantOrderId]/components/ContainerOrderHeader";
+import { useCountdown } from "@hooks/useCountdown";
+import { Text } from "@components/Core/Text";
+import { MAIN_STYLE } from "@statics/MAIN_STYLE";
+import { useRequesting } from "@hooks/useRequesting";
+import { ContainerProductItem } from "@app/menu/[restaurantOrderId]/components/ContainerProductItem";
 
 const Container = styled.div`
   flex: 1;

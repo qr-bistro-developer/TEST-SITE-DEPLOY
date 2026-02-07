@@ -1,6 +1,6 @@
-import "@/styles/globals.css";
+import "@styles/globals.css";
 import { ibmPlexSansThai } from "@assets/fonts";
-import { ContextProvider } from "@/contexts";
+import { ContextProvider } from "@contexts";
 
 export const metadata = {
   // metadataBase: new URL(

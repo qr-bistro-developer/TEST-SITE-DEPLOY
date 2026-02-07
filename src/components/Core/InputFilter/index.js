@@ -8,7 +8,7 @@ import { FILTER_DEBOUNCE } from "@statics/DEBOUNCE";
 import { shallowEqual, useSelector } from "react-redux";
 import { MAIN_STYLE } from "@statics/MAIN_STYLE";
 import { COLOR_GRAY } from "@statics/COLORS";
-import { FONT_FAMILIES } from "@/statics/FONT_FAMILIES";
+import { FONT_FAMILIES } from "@statics/FONT_FAMILIES";
 import { resolveSize } from "@utils/resolve/resolveSize";
 
 const Container = styled.div`

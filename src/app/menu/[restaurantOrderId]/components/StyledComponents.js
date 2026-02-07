@@ -1,4 +1,4 @@
-import { MAIN_STYLE } from "@/statics/MAIN_STYLE";
+import { MAIN_STYLE } from "@statics/MAIN_STYLE";
 import styled from "styled-components";
 
 export const ContainerCashierOrderHeader = styled.div`
