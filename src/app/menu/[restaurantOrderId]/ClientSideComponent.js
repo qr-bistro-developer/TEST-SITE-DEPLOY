@@ -221,12 +221,12 @@ export const ClientSideComponent = ({
                 $item={item}
                 $disabled={disabled}
                 $handleCardPress={() => {
+                  alert("Card click :>> ");
                   console.log("Card click :>> ");
                   // TODO: handle card press
                 }}
                 $handleButtonPress={() => {
-                  console.log("Button click :>> ");
-
+                  alert("Button click :>> ");
                   // TODO: handle button press (add to cart)
                 }}
               />
