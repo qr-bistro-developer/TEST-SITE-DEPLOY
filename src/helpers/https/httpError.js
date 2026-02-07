@@ -17,6 +17,8 @@ export const handleHttpError = ({ status, customMessage = null } = {}) => {
   const error = new Error(message);
   error.status = status;
   error.isHttpError = true;
+  error.displayMessage = message;
+  error.digest = JSON.stringify({ status, message });
   return error;
 };
 

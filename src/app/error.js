@@ -1,6 +1,5 @@
 "use client";
 
-import { Button } from "@/components/Core/Button";
 import { ContainerLayout } from "@/components/Core/ContainerLayout";
 import { Text } from "@/components/Core/Text";
 import _ from "lodash";
@@ -31,10 +30,19 @@ const Line = styled.div`
   background-color: #171717;
 `;
 
+const parseErrorDigest = (digest) => {
+  try {
+    return JSON.parse(digest);
+  } catch {
+    return null;
+  }
+};
+
 const ClientSide = ({ error }) => {
   const router = useRouter();
-  const errorStatus = _.get(error, ["status"], null);
-  const errorMessage = _.get(error, ["message"], "Something went wrong");
+  const digestData = parseErrorDigest(_.get(error, ["digest"]));
+  const errorStatus = _.get(digestData, ["status"]) || _.get(error, ["status"], null);
+  const errorMessage = _.get(digestData, ["message"]) || _.get(error, ["message"], "Something went wrong");
 
   useEffect(() => {
     if (errorStatus === 401) {
