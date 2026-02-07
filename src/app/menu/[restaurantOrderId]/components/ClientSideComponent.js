@@ -110,9 +110,9 @@ export const ClientSideComponent = ({
     return [];
   }, [productWithCategoryKey, filterName, selectedCategory]);
 
-  // const { isDeviceSupport } = useSupportedDevice({
-  //   maxWidth: BREAKPOINTS.MOBILE_MAX,
-  // });
+  const { isDeviceSupport } = useSupportedDevice({
+    maxWidth: BREAKPOINTS.MOBILE_MAX,
+  });
 
   const handleFilter = ({ filterName }) => {
     setFilterName(filterName);
