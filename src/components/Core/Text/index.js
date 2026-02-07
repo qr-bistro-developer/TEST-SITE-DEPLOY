@@ -21,6 +21,9 @@
  * - $ellipsis: boolean (default = false)
  * - $maxLines: number (default = 1)
  *
+ * White Space:
+ * - $whiteSpace: 'normal' | 'nowrap' | 'pre' | 'pre-wrap' | 'pre-line'
+ *
  * Disabled:
  * - $disabled: boolean
  */
@@ -44,6 +47,7 @@ export const Text = styled.span`
   text-decoration: ${({ $decorationLine = "none" }) => $decorationLine};
   text-transform: ${({ $textTransform = "none" }) => $textTransform};
   text-align: ${({ $align = "left" }) => $align};
+  white-space: ${({ $whiteSpace = "normal" }) => $whiteSpace};
   line-height: ${({ $lineHeight = 1.5 }) => $lineHeight};
 
   margin-top: ${({ $mt = 0 }) => `${$mt}px`};

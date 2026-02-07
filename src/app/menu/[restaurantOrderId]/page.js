@@ -5,7 +5,7 @@ import {
   getTableInformation,
 } from "@/services/menu/[restaurantOrderId]";
 import { validateUUID } from "@utils/validateUUID";
-import { ClientSideComponent as ClientRestaurantMenu } from "@/app/menu/[restaurantOrderId]/components/ClientSideComponent";
+import { ClientSideComponent as ClientRestaurantMenu } from "@/app/menu/[restaurantOrderId]/ClientSideComponent";
 import { deviceSupportServer } from "@/helpers/deviceSupport/deviceSupportServer";
 import { ContainerLayout } from "@/components/Core/ContainerLayout";
 import { UnSupportedDevice } from "@/components/Core/UnSupportedDevice";

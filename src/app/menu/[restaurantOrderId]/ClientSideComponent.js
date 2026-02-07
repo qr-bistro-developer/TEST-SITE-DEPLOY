@@ -22,6 +22,7 @@ import { useCountdown } from "@/hooks/useCountdown";
 import { Text } from "@/components/Core/Text";
 import { MAIN_STYLE } from "@/statics/MAIN_STYLE";
 import { useRequesting } from "@/hooks/useRequesting";
+import { ContainerProductItem } from "@/app/menu/[restaurantOrderId]/components/ContainerProductItem";
 
 const Container = styled.div`
   flex: 1;
@@ -34,6 +35,16 @@ const Container = styled.div`
 
 const InputFilterWrapper = styled.div`
   flex: 1;
+`;
+
+const ContainerCategories = styled.div`
+  flex-grow: 0;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  overflow-x: auto;
+  gap: ${MAIN_STYLE.CONTAINER_GAP}px;
+  padding: ${MAIN_STYLE.CONTAINER_GAP}px;
 `;
 
 export const ClientSideComponent = ({
@@ -158,21 +169,47 @@ export const ClientSideComponent = ({
             </Button>
           </ContainerFilter>
         </ContainerCashierOrderHeader>
+        <ContainerCategories>
+          {_.map(categories, (item) => {
+            const categoryId = _.get(item, ["id"]);
+            const categoryName = _.get(item, ["value"]);
+            const isSelected = categoryId === selectedCategory;
+            const isFilterActive = filterName && filterName.trim() !== "";
+            return (
+              <Button
+                key={categoryId}
+                disabled={isFilterActive}
+                onClick={() => setSelectedCategory(categoryId)}
+                $height={MAIN_STYLE.BUTTON_DEFAULT_HEIGHT - 12}
+                $pr={16}
+                $pl={16}
+                $backgroundColor={
+                  isSelected ? theme?.button?.background : theme?.button?.text
+                }
+                $borderWidth={1}
+                $borderRadius={8}
+                $borderColor={theme?.button?.background}
+              >
+                <Text
+                  $ellipsis={false}
+                  $whiteSpace="nowrap"
+                  $fontSize={14}
+                  $fontWeight={600}
+                  $textTransform="capitalize"
+                  $align="center"
+                  $color={
+                    isSelected ? theme?.button?.text : theme?.button?.background
+                  }
+                >
+                  {categoryName}
+                </Text>
+              </Button>
+            );
+          })}
+        </ContainerCategories>
         <ContainerCashierOrderList>
           {_.map(new Array(300), (item, index) => {
-            return (
-              <div
-                key={index}
-                style={{
-                  flexShrink: 0,
-                  marginTop: 12,
-                  marginBottom: 12,
-                  width: 20,
-                  height: 20,
-                  background: "red",
-                }}
-              />
-            );
+            return <ContainerProductItem key={index} />;
           })}
         </ContainerCashierOrderList>
         <ContainerFooter>
